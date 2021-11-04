@@ -24,4 +24,9 @@ public class DeveloperPageInputController {
     public void loadUserData(@RequestBody PulseDto pulseDto){
         userActivityService.save(pulseDto);
     }
+
+    @GetMapping(value="/ping/{token}")
+    public void userPing(@PathVariable String token){
+        userActivityService.userPing(token);
+    }
 }

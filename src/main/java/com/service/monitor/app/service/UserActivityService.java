@@ -26,11 +26,13 @@ public class UserActivityService {
     }
 
     public void save(PulseDto pulseDto){
-        Optional<User> userOptional = findUser(pulseDto);
-        if(userOptional.isPresent()){
-            List<Action> actions = mapActivityCodesToAction(pulseDto.getActivityCodes(), userOptional.get());
-            userOptional.get().getActionCodes().addAll(actions);
-            userRepository.save(userOptional.get());
+        if(pulseDto != null){
+            Optional<User> userOptional = findUser(pulseDto.getToken());
+            if(userOptional.isPresent()) {
+                List<Action> actions = mapActivityCodesToAction(pulseDto.getActivityCodes(), userOptional.get());
+                userOptional.get().getActionCodes().addAll(actions);
+                userRepository.save(userOptional.get());
+            }
         }
     }
 
@@ -38,17 +40,13 @@ public class UserActivityService {
         return activityCodes.stream().map(code -> new Action(LocalDateTime.now(), code, user)).collect(Collectors.toList());
     }
 
-    private Optional<User> findUser(PulseDto pulseDto){
-        if(pulseDto != null){
-            String token = pulseDto.getToken();
-            return userRepository.findByToken(token);
-        }
-        return Optional.empty();
+    private Optional<User> findUser(String token){
+        return userRepository.findByToken(token);
     }
 
     private String createUser(){
         String token = generateToken();
-        User newUser = new User(LocalDateTime.now(), token);
+        User newUser = new User(token);
         userRepository.save(newUser);
         return token;
     }

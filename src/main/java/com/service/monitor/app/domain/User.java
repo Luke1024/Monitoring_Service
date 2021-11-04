@@ -17,10 +17,9 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @OrderColumn
     private long id;
     private String token;
-    private LocalDateTime firstActive;
-    private LocalDateTime lastActive;
     @OneToMany(targetEntity = Action.class)
     @OrderColumn
     private List<Action> actionCodes;
@@ -28,18 +27,9 @@ public class User {
     public User() {
     }
 
-    public User(LocalDateTime firstActive, String token) {
+    public User(String token) {
         this.token = token;
-        this.firstActive = firstActive;
         this.actionCodes = new ArrayList<>();
-    }
-
-    public LocalDateTime getFirstActive() {
-        return firstActive;
-    }
-
-    public LocalDateTime getLastActive() {
-        return lastActive;
     }
 
     public List<Action> getActionCodes() {
@@ -52,13 +42,5 @@ public class User {
 
     public long getId() {
         return id;
-    }
-
-    public void setFirstActive(LocalDateTime firstActive) {
-        this.firstActive = firstActive;
-    }
-
-    public void setLastActive(LocalDateTime lastActive) {
-        this.lastActive = lastActive;
     }
 }
