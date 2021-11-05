@@ -1,6 +1,5 @@
 package com.service.monitor.app.domain;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,18 +21,18 @@ public class User {
     private String token;
     @OneToMany(targetEntity = Action.class)
     @OrderColumn
-    private List<Action> actionCodes;
+    private List<Action> actions;
 
     public User() {
     }
 
     public User(String token) {
         this.token = token;
-        this.actionCodes = new ArrayList<>();
+        this.actions = new ArrayList<>();
     }
 
-    public List<Action> getActionCodes() {
-        return actionCodes;
+    public List<Action> getActions() {
+        return actions;
     }
 
     public String getToken() {

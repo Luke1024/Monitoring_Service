@@ -30,7 +30,7 @@ public class UserActivityService {
             Optional<User> userOptional = findUser(pulseDto.getToken());
             if(userOptional.isPresent()) {
                 List<Action> actions = mapActivityCodesToAction(pulseDto.getActivityCodes(), userOptional.get());
-                userOptional.get().getActionCodes().addAll(actions);
+                userOptional.get().getActions().addAll(actions);
                 userRepository.save(userOptional.get());
             }
         }
