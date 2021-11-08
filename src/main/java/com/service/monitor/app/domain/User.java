@@ -19,7 +19,7 @@ public class User {
     @OrderColumn
     private long id;
     private String token;
-    @OneToMany(targetEntity = Action.class)
+    @OneToMany(targetEntity = Action.class, cascade = CascadeType.ALL)
     @OrderColumn
     private List<Action> actions;
 

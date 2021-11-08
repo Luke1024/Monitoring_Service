@@ -13,8 +13,13 @@ public class StatsController {
     @Autowired
     private StatsService statsService;
 
-    @GetMapping(value="/report/weekly")
-    public ReportDto getFullReport(){
-        return statsService.getWeeklyReport();
+    @GetMapping(value="/report/{days}")
+    public ReportDto getFullReport(@PathVariable int days){
+        return statsService.getWeeklyReport(days);
+    }
+
+    @GetMapping(value = "/report/user/{id}")
+    public ReportDto getUserReport(@PathVariable long id){
+        return statsService.getUserReport(id);
     }
 }

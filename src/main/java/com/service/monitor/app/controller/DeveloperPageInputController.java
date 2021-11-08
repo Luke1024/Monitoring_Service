@@ -1,7 +1,10 @@
 package com.service.monitor.app.controller;
 
 import com.service.monitor.app.domain.PulseDto;
+import com.service.monitor.app.domain.StringDto;
 import com.service.monitor.app.service.UserActivityService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,13 +16,18 @@ public class DeveloperPageInputController {
     @Autowired
     private UserActivityService userActivityService;
 
+    private Logger LOGGER = LoggerFactory.getLogger(DeveloperPageInputController.class);
+
     @GetMapping(value="/token")
-    public String getToken(){
-        return userActivityService.getToken();
+    public StringDto getToken(){
+        String token = userActivityService.getToken();
+        LOGGER.info("Sending token: " + token);
+        return new StringDto(token);
     }
 
-    @GetMapping(value="/load")
-    public void loadUserData(@RequestBody PulseDto pulseDto){
-        userActivityService.save(pulseDto);
+    @PostMapping(value="/load")
+    public boolean loadUserData(@RequestBody PulseDto pulseDto){
+        LOGGER.info(pulseDto.toString());
+        return userActivityService.save(pulseDto);
     }
 }

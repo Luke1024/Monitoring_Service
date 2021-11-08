@@ -9,7 +9,10 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class StatsService {
@@ -17,35 +20,59 @@ public class StatsService {
     @Autowired
     private UserRepository userRepository;
 
-    public ReportDto getWeeklyReport(){
-        List<User> weeklyUsers = new ArrayList<>();
+    public ReportDto getWeeklyReport(int daysFromNow){
+        List<User> recentUsers = new ArrayList<>();
 
         Iterable<User> users = userRepository.findAll();
         for(User user : users){
-            if(isWeeklyUser(user)){
-                weeklyUsers.add(user);
+            if(isRecentUser(user, daysFromNow)){
+                recentUsers.add(user);
             }
         }
-        return buildWeeklyReportOfUsers(weeklyUsers);
+        return buildReportOfRecentUsers(recentUsers);
     }
 
-    private boolean isWeeklyUser(User user){
+    public ReportDto getUserReport(long id){
+        List<User> userOperations = new ArrayList<>();
+
+        Optional<User> userOptional = userRepository.findById(id);
+
+        if(userOptional.isPresent()){
+            return buildUserReport(userOptional.get());
+        } else {
+            return new ReportDto(Collections.singletonList("User not found."));
+        }
+    }
+
+    private ReportDto buildUserReport(User user){
+        List<String> operations = user.getActions().stream()
+                .map(action -> action.toString()).collect(Collectors.toList());
+        return new ReportDto(operations);
+    }
+
+    private boolean isRecentUser(User user, int daysFromNow){
         List<Action> userActions = user.getActions();
-        LocalDateTime lastActionTimestamp = getUserLastActionTimestamp(userActions);
-        return isActionWasNotEarlierThanAWeek(lastActionTimestamp);
+        Optional<LocalDateTime> lastActionTimestamp = getUserLastActionTimestamp(userActions);
+        if(lastActionTimestamp.isPresent()) {
+            return isActionRecent(lastActionTimestamp.get(), daysFromNow);
+        } else return false;
     }
 
-    private LocalDateTime getUserLastActionTimestamp(List<Action> userActions){
-        return userActions.get(userActions.size()-1).getTimeStamp();
+    private Optional<LocalDateTime> getUserLastActionTimestamp(List<Action> userActions){
+        if(userActions.size()>0) {
+            return Optional.of(userActions.get(userActions.size() - 1).getTimeStamp());
+        } else {
+            return Optional.empty();
+        }
     }
 
-    private boolean isActionWasNotEarlierThanAWeek(LocalDateTime lastActionTimestamp){
-        return lastActionTimestamp.isAfter(LocalDateTime.now().minusDays(7));
+    private boolean isActionRecent(LocalDateTime lastActionTimestamp, int daysFromNow){
+        return lastActionTimestamp.isAfter(LocalDateTime.now().minusDays(daysFromNow));
     }
 
-    private ReportDto buildWeeklyReportOfUsers(List<User> weeklyUsers){
+    private ReportDto buildReportOfRecentUsers(List<User> recentUsers){
         List<String> userStats = new ArrayList<>();
-        for(User user : weeklyUsers){
+        for(User user : recentUsers){
             userStats.add(generateSingleUserReport(user));
         }
         return new ReportDto(userStats);

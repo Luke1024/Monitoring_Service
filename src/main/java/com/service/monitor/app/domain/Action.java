@@ -34,4 +34,9 @@ public class Action {
     public User getUser() {
         return user;
     }
+
+    @Override
+    public String toString() {
+        return timeStamp.toString() + ", op= " + actionCode;
+    }
 }

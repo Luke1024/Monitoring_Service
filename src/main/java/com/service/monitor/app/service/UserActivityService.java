@@ -8,10 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 import java.util.Random;
-import java.util.stream.Collectors;
 
 @Service
 public class UserActivityService {
@@ -25,19 +23,21 @@ public class UserActivityService {
         return createUser();
     }
 
-    public void save(PulseDto pulseDto){
+    public boolean save(PulseDto pulseDto){
         if(pulseDto != null){
             Optional<User> userOptional = findUser(pulseDto.getToken());
             if(userOptional.isPresent()) {
-                List<Action> actions = mapActivityCodesToAction(pulseDto.getActivityCodes(), userOptional.get());
-                userOptional.get().getActions().addAll(actions);
+                Action action = mapActivityCodesToAction(pulseDto.getCode(), userOptional.get());
+                userOptional.get().getActions().add(action);
                 userRepository.save(userOptional.get());
+                return true;
             }
         }
+        return false;
     }
 
-    private List<Action> mapActivityCodesToAction(List<String> activityCodes, User user){
-        return activityCodes.stream().map(code -> new Action(LocalDateTime.now(), code, user)).collect(Collectors.toList());
+    private Action mapActivityCodesToAction(String code, User user){
+        return new Action(LocalDateTime.now(), code, user);
     }
 
     private Optional<User> findUser(String token){
