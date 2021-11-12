@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+$(document).ready(function(){
+  $("button").click(function(){
+    $.ajax({url: "https://powerful-savannah-44442.herokuapp.com/stats/report/5", success: function(result){
+      $("#div1").html(result);
+    }});
+  });
+});
+</script>
+</head>
+<body>
+
+<div id="div1"><h1>Stats:</h1></div>
+
+<button>Get User stats</button>
+
+</body>
+</html>

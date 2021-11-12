@@ -22,4 +22,6 @@ public class StatsController {
     public ReportDto getUserReport(@PathVariable long id){
         return statsService.getUserReport(id);
     }
+
+
 }
