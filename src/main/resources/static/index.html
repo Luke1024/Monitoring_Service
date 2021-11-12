@@ -1,22 +1,16 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
 <head>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script>
-$(document).ready(function(){
-  $("button").click(function(){
-    $.ajax({url: "https://powerful-savannah-44442.herokuapp.com/stats/report/5", success: function(result){
-      $("#div1").html(result);
-    }});
-  });
-});
-</script>
-</head>
-<body>
-
-<div id="div1"><h1>Stats:</h1></div>
-
-<button>Get User stats</button>
-
-</body>
+  <meta charset="utf-8">
+  <title>ToDoApp</title>
+  <base href="/">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&amp;display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link rel="stylesheet" href="styles.css"></head>
+<body class="mat-typography">
+  <app-root></app-root>
+<script src="runtime.js" defer></script><script src="polyfills.js" defer></script><script src="vendor.js" defer></script><script src="main.js" defer></script></body>
 </html>
