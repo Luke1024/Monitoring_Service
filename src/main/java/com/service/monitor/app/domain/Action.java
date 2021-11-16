@@ -11,16 +11,16 @@ public class Action {
     private LocalDateTime timeStamp;
     private String actionCode;
     @ManyToOne
-    @JoinColumn(name="USER_ID")
-    private User user;
+    @JoinColumn(name="APPUSER_ID")
+    private AppUser appUser;
 
     public Action() {
     }
 
-    public Action(LocalDateTime timeStamp, String actionCode, User user) {
+    public Action(LocalDateTime timeStamp, String actionCode, AppUser appUser) {
         this.timeStamp = timeStamp;
         this.actionCode = actionCode;
-        this.user = user;
+        this.appUser = appUser;
     }
 
     public LocalDateTime getTimeStamp() {
@@ -31,8 +31,8 @@ public class Action {
         return actionCode;
     }
 
-    public User getUser() {
-        return user;
+    public AppUser getAppUser() {
+        return appUser;
     }
 
     @Override

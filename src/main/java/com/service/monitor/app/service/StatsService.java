@@ -2,7 +2,7 @@ package com.service.monitor.app.service;
 
 import com.service.monitor.app.domain.Action;
 import com.service.monitor.app.domain.ReportDto;
-import com.service.monitor.app.domain.User;
+import com.service.monitor.app.domain.AppUser;
 import com.service.monitor.app.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,21 +21,21 @@ public class StatsService {
     private UserRepository userRepository;
 
     public ReportDto getWeeklyReport(int daysFromNow){
-        List<User> recentUsers = new ArrayList<>();
+        List<AppUser> recentAppUsers = new ArrayList<>();
 
-        Iterable<User> users = userRepository.findAll();
-        for(User user : users){
-            if(isRecentUser(user, daysFromNow)){
-                recentUsers.add(user);
+        Iterable<AppUser> users = userRepository.findAll();
+        for(AppUser appUser : users){
+            if(isRecentUser(appUser, daysFromNow)){
+                recentAppUsers.add(appUser);
             }
         }
-        return buildReportOfRecentUsers(recentUsers);
+        return buildReportOfRecentUsers(recentAppUsers);
     }
 
     public ReportDto getUserReport(long id){
-        List<User> userOperations = new ArrayList<>();
+        List<AppUser> appUserOperations = new ArrayList<>();
 
-        Optional<User> userOptional = userRepository.findById(id);
+        Optional<AppUser> userOptional = userRepository.findById(id);
 
         if(userOptional.isPresent()){
             return buildUserReport(userOptional.get());
@@ -44,14 +44,14 @@ public class StatsService {
         }
     }
 
-    private ReportDto buildUserReport(User user){
-        List<String> operations = user.getActions().stream()
+    private ReportDto buildUserReport(AppUser appUser){
+        List<String> operations = appUser.getActions().stream()
                 .map(action -> action.toString()).collect(Collectors.toList());
         return new ReportDto(operations);
     }
 
-    private boolean isRecentUser(User user, int daysFromNow){
-        List<Action> userActions = user.getActions();
+    private boolean isRecentUser(AppUser appUser, int daysFromNow){
+        List<Action> userActions = appUser.getActions();
         Optional<LocalDateTime> lastActionTimestamp = getUserLastActionTimestamp(userActions);
         if(lastActionTimestamp.isPresent()) {
             return isActionRecent(lastActionTimestamp.get(), daysFromNow);
@@ -70,15 +70,15 @@ public class StatsService {
         return lastActionTimestamp.isAfter(LocalDateTime.now().minusDays(daysFromNow));
     }
 
-    private ReportDto buildReportOfRecentUsers(List<User> recentUsers){
+    private ReportDto buildReportOfRecentUsers(List<AppUser> recentAppUsers){
         List<String> userStats = new ArrayList<>();
-        for(User user : recentUsers){
-            userStats.add(generateSingleUserReport(user));
+        for(AppUser appUser : recentAppUsers){
+            userStats.add(generateSingleUserReport(appUser));
         }
         return new ReportDto(userStats);
     }
 
-    private String generateSingleUserReport(User user){
-        return "ID: " + user.getId() + ", OP: " + user.getActions().size();
+    private String generateSingleUserReport(AppUser appUser){
+        return "ID: " + appUser.getId() + ", OP: " + appUser.getActions().size();
     }
 }

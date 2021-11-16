@@ -6,13 +6,13 @@ import java.util.List;
 import javax.persistence.*;
 
 @NamedNativeQuery(
-        name = "User.findByToken",
-        query = "SELECT * FROM user WHERE token=:TOKEN",
-        resultClass = User.class
+        name = "AppUser.findByToken",
+        query = "SELECT * FROM appuser WHERE token=:TOKEN",
+        resultClass = AppUser.class
 )
 
 @Entity
-public class User {
+public class AppUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -23,10 +23,10 @@ public class User {
     @OrderColumn
     private List<Action> actions;
 
-    public User() {
+    public AppUser() {
     }
 
-    public User(String token) {
+    public AppUser(String token) {
         this.token = token;
         this.actions = new ArrayList<>();
     }
