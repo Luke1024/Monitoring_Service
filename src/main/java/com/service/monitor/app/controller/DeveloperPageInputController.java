@@ -1,7 +1,7 @@
 package com.service.monitor.app.controller;
 
-import com.service.monitor.app.domain.PulseDto;
-import com.service.monitor.app.domain.StringDto;
+import com.service.monitor.app.domain.dto.PulseDto;
+import com.service.monitor.app.domain.dto.StringDto;
 import com.service.monitor.app.service.UserActivityService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

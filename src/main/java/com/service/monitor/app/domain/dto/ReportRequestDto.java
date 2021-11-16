@@ -1,4 +1,4 @@
-package com.service.monitor.app.domain;
+package com.service.monitor.app.domain.dto;
 
 public class ReportRequestDto {
     private int days;

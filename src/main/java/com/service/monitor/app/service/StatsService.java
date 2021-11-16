@@ -1,7 +1,7 @@
 package com.service.monitor.app.service;
 
 import com.service.monitor.app.domain.Action;
-import com.service.monitor.app.domain.ReportDto;
+import com.service.monitor.app.domain.dto.ReportDto;
 import com.service.monitor.app.domain.AppUser;
 import com.service.monitor.app.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

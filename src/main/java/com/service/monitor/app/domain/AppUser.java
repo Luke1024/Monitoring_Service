@@ -5,12 +5,6 @@ import java.util.List;
 
 import javax.persistence.*;
 
-@NamedNativeQuery(
-        name = "AppUser.findByToken",
-        query = "SELECT * FROM appuser WHERE token=:TOKEN",
-        resultClass = AppUser.class
-)
-
 @Entity
 public class AppUser {
 
