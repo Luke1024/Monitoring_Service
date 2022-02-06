@@ -23,11 +23,11 @@ public class UserActivityService {
     @Autowired
     private UserRepository userRepository;
 
-    public String getToken(){
-        return createUser();
+    public String getToken(String ip){
+        return createUser(ip);
     }
 
-    public boolean save(PulseDto pulseDto, String ipAdress){
+    public boolean save(PulseDto pulseDto){
         if(pulseDto != null){
             Optional<AppUser> userOptional = findUser(pulseDto.getToken());
             if(userOptional.isPresent()) {
@@ -70,9 +70,9 @@ public class UserActivityService {
         return userRepository.findByToken(token);
     }
 
-    private String createUser(){
+    private String createUser(String ip){
         String token = generateToken();
-        AppUser newAppUser = new AppUser(token);
+        AppUser newAppUser = new AppUser(token,ip);
         userRepository.save(newAppUser);
         return token;
     }

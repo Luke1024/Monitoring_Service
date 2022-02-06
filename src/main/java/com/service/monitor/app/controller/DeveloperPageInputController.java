@@ -27,15 +27,15 @@ public class DeveloperPageInputController {
     }
 
     @GetMapping(value="/token")
-    public StringDto getToken(){
-        String token = userActivityService.getToken();
+    public StringDto getToken(HttpServletRequest request){
+        String token = userActivityService.getToken(request.getRemoteAddr());
         return new StringDto(token);
     }
 
     @PostMapping(value="/load")
-    public boolean loadUserData(@RequestBody PulseDto pulseDto, HttpServletRequest request){
+    public boolean loadUserData(@RequestBody PulseDto pulseDto){
         LOGGER.info(pulseDto.toString());
-        return userActivityService.save(pulseDto, request.getRemoteAddr());
+        return userActivityService.save(pulseDto);
     }
 
     @PutMapping(value="/contact")
