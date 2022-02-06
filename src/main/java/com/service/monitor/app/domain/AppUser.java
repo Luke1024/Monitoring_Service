@@ -13,9 +13,13 @@ public class AppUser {
     @OrderColumn
     private long id;
     private String token;
+    private String ipAdress;
     @OneToMany(targetEntity = Action.class, cascade = CascadeType.ALL)
     @OrderColumn
     private List<Action> actions;
+    @OneToMany(targetEntity = Contact.class, cascade = CascadeType.ALL)
+    @OrderColumn
+    private List<Contact> contacts;
 
     public AppUser() {
     }
@@ -27,6 +31,10 @@ public class AppUser {
 
     public List<Action> getActions() {
         return actions;
+    }
+
+    public List<Contact> getContacts() {
+        return contacts;
     }
 
     public String getToken() {

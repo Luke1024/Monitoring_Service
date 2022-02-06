@@ -11,8 +11,6 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends CrudRepository<AppUser, Long> {
 
-    @Query(
-            value="SELECT u FROM AppUser u WHERE u.token =:token"
-    )
+    @Query("SELECT u FROM AppUser u WHERE u.token =:token")
     Optional<AppUser> findByToken(@Param("token") String token);
 }

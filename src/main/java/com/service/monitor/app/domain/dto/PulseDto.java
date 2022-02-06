@@ -5,29 +5,29 @@ import java.util.List;
 public class PulseDto {
 
     private String token;
-    private String code;
+    private List<String> actions;
 
     public PulseDto() {
     }
 
-    public PulseDto(String token, String code) {
+    public PulseDto(String token, List<String> actions) {
         this.token = token;
-        this.code = code;
+        this.actions = actions;
     }
 
     public String getToken() {
         return token;
     }
 
-    public String getCode() {
-        return code;
+    public List<String> getActions() {
+        return actions;
     }
 
     @Override
     public String toString() {
         return "PulseDto{" +
                 "token='" + token + '\'' +
-                ", activityCodes=" + code +
+                ", actions=" + actions +
                 '}';
     }
 }
