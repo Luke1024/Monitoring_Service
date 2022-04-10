@@ -2,7 +2,6 @@ package com.service.monitor.app.domain;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
 public class Action {

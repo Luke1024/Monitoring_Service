@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.Random;
 
@@ -25,13 +26,13 @@ public class UserRepositoryTest {
     public void testFindByToken(){
         String token = generateToken();
 
-        AppUser appUser = new AppUser(token);
+        AppUser appUser = new AppUser(token, "", LocalDateTime.now());
 
         userRepository.save(appUser);
 
         Optional<AppUser> appUserOptional = userRepository.findByToken(token);
 
-        Assert.assertEquals(token, appUserOptional.get().getToken());
+        Assert.assertEquals(token, appUserOptional.get().token);
     }
 
     private String generateToken(){

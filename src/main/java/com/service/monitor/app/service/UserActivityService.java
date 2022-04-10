@@ -32,7 +32,8 @@ public class UserActivityService {
             Optional<AppUser> userOptional = findUser(pulseDto.getToken());
             if(userOptional.isPresent()) {
                 List<Action> actions = mapDtoToActionList(pulseDto.getActions(), userOptional.get());
-                userOptional.get().getActions().addAll(actions);
+                userOptional.get().actions.addAll(actions);
+                userOptional.get().updateLastActive();
                 userRepository.save(userOptional.get());
                 return true;
             }
@@ -43,7 +44,7 @@ public class UserActivityService {
     public boolean saveContact(ContactDto contactDto) {
         Optional<AppUser> appUserOptional = findUser(contactDto.getToken());
         if(appUserOptional.isPresent()){
-            appUserOptional.get().getContacts().add(
+            appUserOptional.get().contacts.add(
                     new Contact(contactDto.getName(),
                             contactDto.getEmail(),
                             contactDto.getMessage(),
@@ -72,7 +73,7 @@ public class UserActivityService {
 
     private String createUser(String ip){
         String token = generateToken();
-        AppUser newAppUser = new AppUser(token,ip);
+        AppUser newAppUser = new AppUser(token,ip, LocalDateTime.now());
         userRepository.save(newAppUser);
         return token;
     }
