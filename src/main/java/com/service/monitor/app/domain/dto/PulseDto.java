@@ -4,19 +4,13 @@ import java.util.List;
 
 public class PulseDto {
 
-    private String token;
     private List<String> actions;
 
     public PulseDto() {
     }
 
-    public PulseDto(String token, List<String> actions) {
-        this.token = token;
+    public PulseDto(List<String> actions) {
         this.actions = actions;
-    }
-
-    public String getToken() {
-        return token;
     }
 
     public List<String> getActions() {
@@ -26,7 +20,6 @@ public class PulseDto {
     @Override
     public String toString() {
         return "PulseDto{" +
-                "token='" + token + '\'' +
                 ", actions=" + actions +
                 '}';
     }
