@@ -3,6 +3,7 @@ package com.service.monitor.app.controller;
 import com.service.monitor.app.domain.dto.ContactDto;
 import com.service.monitor.app.domain.dto.PulseDto;
 import com.service.monitor.app.service.UserActivityService;
+import com.service.monitor.app.service.UserIdentityAuthorizer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,11 +20,14 @@ public class DeveloperPageInputController {
     @Autowired
     private UserActivityService userActivityService;
 
+    @Autowired
+    private UserIdentityAuthorizer identityAuthorizer;
+
     private Logger LOGGER = LoggerFactory.getLogger(DeveloperPageInputController.class);
 
     @GetMapping(value="/auth")
     public void getToken(HttpServletRequest request, HttpServletResponse response){
-        userActivityService.userAuth(request, response);
+        identityAuthorizer.preAuth(request, response);
     }
 
     @PostMapping(value="/load")
@@ -33,8 +37,8 @@ public class DeveloperPageInputController {
     }
 
     @PutMapping(value="/contact")
-    public boolean saveUserContact(@RequestBody ContactDto contactDto){
+    public boolean saveUserContact(@RequestBody ContactDto contactDto, HttpServletRequest request){
         LOGGER.info(contactDto.toString());
-        return userActivityService.saveContact(contactDto);
+        return userActivityService.saveContact(contactDto, request);
     }
 }

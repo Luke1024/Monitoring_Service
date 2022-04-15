@@ -14,6 +14,7 @@ public class AppUser {
     @OrderColumn
     public long id;
     public String token;
+    public boolean withCookies;
     @OneToMany(targetEntity = Action.class, cascade = CascadeType.ALL)
     @OrderColumn
     public List<Action> actions = new ArrayList<>();
@@ -28,9 +29,8 @@ public class AppUser {
     public AppUser() {
     }
 
-    public AppUser(String token, String ipAdress, LocalDateTime lastActive) {
-        IPAdress newAdress = new IPAdress(LocalDateTime.now(), ipAdress, this);
-        this.ipAdresses.add(newAdress);
+    public AppUser(boolean withCookies, String token, String ipAdress, LocalDateTime lastActive) {
+        this.ipAdresses.add(new IPAdress(LocalDateTime.now(), ipAdress, this));
         this.token = token;
         this.lastActive = lastActive;
     }
