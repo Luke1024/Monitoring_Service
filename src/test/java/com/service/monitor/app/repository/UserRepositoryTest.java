@@ -26,7 +26,7 @@ public class UserRepositoryTest {
     public void testFindByToken(){
         String token = generateToken();
 
-        AppUser appUser = new AppUser(token, "", LocalDateTime.now());
+        AppUser appUser = new AppUser(true,token, "", LocalDateTime.now());
 
         userRepository.save(appUser);
 

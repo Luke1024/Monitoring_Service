@@ -21,7 +21,7 @@ public class AppUser {
     @OneToMany(targetEntity = Contact.class, cascade = CascadeType.ALL)
     @OrderColumn
     public List<Contact> contacts = new ArrayList<>();
-    @OneToMany(targetEntity = IPAdress.class, cascade = CascadeType.ALL)
+    @OneToMany(targetEntity = IPAdress.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @OrderColumn
     public List<IPAdress> ipAdresses = new ArrayList<>();
     public LocalDateTime lastActive;
