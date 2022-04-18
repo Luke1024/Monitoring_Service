@@ -1,0 +1,26 @@
+package com.service.monitor.app.service.user.identity.authorizer;
+
+
+import org.springframework.stereotype.Service;
+
+import java.security.SecureRandom;
+
+@Service
+public class TokenGenerator {
+
+    private SecureRandom random = new SecureRandom();
+    protected int tokenLenght = 16;
+
+    public String generate(){
+        int leftLimit = 97;
+        int rightLimit = 122;
+        int targetStringLength = tokenLenght;
+        StringBuilder buffer = new StringBuilder(targetStringLength);
+        for (int i = 0; i < targetStringLength; i++) {
+            int randomLimitedInt = leftLimit + (int)
+                    (random.nextFloat() * (rightLimit - leftLimit + 1));
+            buffer.append((char) randomLimitedInt);
+        }
+        return buffer.toString();
+    }
+}

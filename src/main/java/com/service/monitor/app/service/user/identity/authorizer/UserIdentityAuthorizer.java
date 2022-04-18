@@ -6,7 +6,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.security.SecureRandom;
 import java.util.ArrayList;
@@ -20,8 +19,10 @@ public class UserIdentityAuthorizer {
     @Autowired
     private UserService userService;
 
-    private String authCookieName = "AUTH";
-    protected int tokenLenght = 16;
+    @Autowired
+    private TokenGenerator tokenGenerator;
+
+    protected String authCookieName = "AUTH";
 
     private Logger LOGGER = LoggerFactory.getLogger(UserIdentityAuthorizer.class);
 
@@ -46,9 +47,12 @@ public class UserIdentityAuthorizer {
     }
 
     private void generateNewToken(HttpServletResponse response){
-        String tokenNew = generateToken();
+        String tokenNew = tokenGenerator.generate();
         userService.addTokenToPreAuth(tokenNew);
-        response.addCookie(new Cookie(authCookieName, tokenNew));
+        Cookie cookie = new Cookie(authCookieName, tokenNew);
+        cookie.setHttpOnly(true);
+        cookie.setMaxAge(15000000);
+        response.addCookie(cookie);
     }
 
     private Optional<String> filterValidCookiesToToken(Cookie[] cookies){
@@ -75,24 +79,11 @@ public class UserIdentityAuthorizer {
 
     private boolean isCookieGood(Cookie cookie){
         if (cookie.getName() == authCookieName) {
-            if (cookie.getValue().length() == tokenLenght) {
+            if (cookie.getValue().length() == tokenGenerator.tokenLenght) {
                 userService.addTokenToPreAuth(cookie.getValue());
                 return true;
             }
         }
         return false;
-    }
-
-    private String generateToken(){
-        int leftLimit = 97;
-        int rightLimit = 122;
-        int targetStringLength = tokenLenght;
-        StringBuilder buffer = new StringBuilder(targetStringLength);
-        for (int i = 0; i < targetStringLength; i++) {
-            int randomLimitedInt = leftLimit + (int)
-                    (random.nextFloat() * (rightLimit - leftLimit + 1));
-            buffer.append((char) randomLimitedInt);
-        }
-        return buffer.toString();
     }
 }

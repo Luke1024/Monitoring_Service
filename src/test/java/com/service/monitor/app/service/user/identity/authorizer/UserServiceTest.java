@@ -28,9 +28,12 @@ public class UserServiceTest {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private TokenGenerator tokenGenerator;
+
     @Test
     public void findUserByToken() {
-        String token = generateToken();
+        String token = tokenGenerator.generate();
         AppUser appUser = new AppUser(true, token,"", LocalDateTime.now());
         userRepository.save(appUser);
 
@@ -39,7 +42,7 @@ public class UserServiceTest {
 
     @Test
     public void findUserByIpAdressWithoutCookes() {
-        String tokenAsAdress = generateToken();
+        String tokenAsAdress = tokenGenerator.generate();
         AppUser appUser = new AppUser(false, "",tokenAsAdress, LocalDateTime.now());
         userRepository.save(appUser);
 
@@ -50,7 +53,7 @@ public class UserServiceTest {
 
     @Test
     public void tryToFindUserWithIpAdressWithCookies() {
-        String tokenAsAdress = generateToken();
+        String tokenAsAdress = tokenGenerator.generate();
         AppUser appUser = new AppUser(true, "",tokenAsAdress, LocalDateTime.now());
         userRepository.save(appUser);
         long originalUserId = appUser.id;
@@ -61,7 +64,7 @@ public class UserServiceTest {
 
     @Test
     public void createUserWithToken() {
-        String token = generateToken();
+        String token = tokenGenerator.generate();
         userService.addTokenToPreAuth(token);
 
         AppUser appUser = userService.findOrCreateUser(Optional.of(token), "");
@@ -70,24 +73,11 @@ public class UserServiceTest {
 
     @Test
     public void createUserWithAdress() {
-        String tokenAsAdress = generateToken();
+        String tokenAsAdress = tokenGenerator.generate();
 
         AppUser appUser = userService.findOrCreateUser(Optional.empty(), tokenAsAdress);
 
         Assert.assertEquals(tokenAsAdress, appUser.ipAdresses.get(0).getAdress());
         Assert.assertEquals(false, appUser.withCookies);
-    }
-
-    private String generateToken(){
-        int leftLimit = 97;
-        int rightLimit = 122;
-        int targetStringLength = identityAuthorizer.tokenLenght;
-        StringBuilder buffer = new StringBuilder(targetStringLength);
-        for (int i = 0; i < targetStringLength; i++) {
-            int randomLimitedInt = leftLimit + (int)
-                    (random.nextFloat() * (rightLimit - leftLimit + 1));
-            buffer.append((char) randomLimitedInt);
-        }
-        return buffer.toString();
     }
 }

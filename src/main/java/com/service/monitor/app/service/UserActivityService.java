@@ -40,13 +40,6 @@ public class UserActivityService {
         return true;
     }
 
-    private void saveAction(PulseDto pulseDto, AppUser user){
-        List<Action> actions = mapDtoToActionList(pulseDto.getActions(), user);
-        user.actions.addAll(actions);
-        user.updateLastActive();
-        userRepository.save(user);
-    }
-
     public boolean saveContact(ContactDto contactDto, Cookie[] cookies, String ipAdress) {
         AppUser appUser = identityAuthorizer.auth(cookies, ipAdress);
         appUser.contacts.add(
@@ -57,6 +50,13 @@ public class UserActivityService {
 
         userRepository.save(appUser);
         return true;
+    }
+
+    private void saveAction(PulseDto pulseDto, AppUser user){
+        List<Action> actions = mapDtoToActionList(pulseDto.getActions(), user);
+        user.actions.addAll(actions);
+        user.updateLastActive();
+        userRepository.save(user);
     }
 
     private List<Action> mapDtoToActionList(List<String> actionsString, AppUser appUser) {
