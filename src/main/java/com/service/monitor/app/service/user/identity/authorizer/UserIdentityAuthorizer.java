@@ -29,11 +29,14 @@ public class UserIdentityAuthorizer {
     public void preAuth(Cookie[] cookies, HttpServletResponse response){
         Optional<String> token = filterValidCookiesToToken(cookies);
         if(token.isPresent()){
+            LOGGER.info("Received token: " + token.get());
             Optional<AppUser> appUser = findUserByToken(token.get());
             if(appUser.isPresent()){
+                LOGGER.info("User found with token: " + token.get());
                 return;
             }
         }
+        LOGGER.info("Generating new token.");
         generateNewToken(response);
     }
 
@@ -78,7 +81,7 @@ public class UserIdentityAuthorizer {
     }
 
     private boolean isCookieGood(Cookie cookie){
-        if (cookie.getName() == authCookieName) {
+        if (cookie.getName().equals(authCookieName)) {
             if (cookie.getValue().length() == tokenGenerator.tokenLenght) {
                 userService.addTokenToPreAuth(cookie.getValue());
                 return true;

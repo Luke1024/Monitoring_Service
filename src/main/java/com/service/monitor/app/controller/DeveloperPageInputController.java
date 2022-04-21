@@ -2,6 +2,7 @@ package com.service.monitor.app.controller;
 
 import com.service.monitor.app.domain.dto.ContactDto;
 import com.service.monitor.app.domain.dto.PulseDto;
+import com.service.monitor.app.domain.dto.StringDto;
 import com.service.monitor.app.service.UserActivityService;
 import com.service.monitor.app.service.user.identity.authorizer.UserIdentityAuthorizer;
 import org.slf4j.Logger;
@@ -32,11 +33,11 @@ public class DeveloperPageInputController {
     }
 
     @PostMapping(value="/load")
-    public boolean loadUserData(@RequestBody PulseDto pulseDto, HttpServletRequest request){
+    public boolean loadUserData(@RequestBody StringDto message, HttpServletRequest request){
         Cookie[] cookies = request.getCookies();
         String ipAdress = request.getRemoteAddr();
-        LOGGER.info(pulseDto.toString());
-        return userActivityService.save(pulseDto, cookies, ipAdress);
+        LOGGER.info(message.getMessage() + " " + request.getRemoteAddr());
+        return userActivityService.save(message.getMessage(), cookies, ipAdress);
     }
 
     @PutMapping(value="/contact")

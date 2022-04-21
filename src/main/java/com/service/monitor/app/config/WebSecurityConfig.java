@@ -19,7 +19,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(WebSecurity web) throws Exception {
         web
                 .ignoring()
-                .antMatchers("/input/**");
+                .antMatchers("/input/**", "/input/load/**");
     }
 
     @Override
@@ -52,3 +52,5 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return new InMemoryUserDetailsManager(user);
     }
 }
+
+

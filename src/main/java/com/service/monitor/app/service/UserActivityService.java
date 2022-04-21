@@ -14,8 +14,6 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.Cookie;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 @Service
@@ -31,12 +29,9 @@ public class UserActivityService {
 
     private Logger LOGGER = LoggerFactory.getLogger(UserActivityService.class);
 
-    public boolean save(PulseDto pulseDto, Cookie[] cookies, String ipAdress) {
-        if(pulseDto==null){
-            return true;
-        }
+    public boolean save(String action, Cookie[] cookies, String ipAdress) {
         AppUser appUser = identityAuthorizer.auth(cookies, ipAdress);
-        saveAction(pulseDto, appUser);
+        saveAction(action, appUser);
         return true;
     }
 
@@ -52,20 +47,12 @@ public class UserActivityService {
         return true;
     }
 
-    private void saveAction(PulseDto pulseDto, AppUser user){
-        List<Action> actions = mapDtoToActionList(pulseDto.getActions(), user);
-        user.actions.addAll(actions);
+    private void saveAction(String action, AppUser user){
+        user.actions.add(mapToAction(action, user));
         user.updateLastActive();
         userRepository.save(user);
     }
 
-    private List<Action> mapDtoToActionList(List<String> actionsString, AppUser appUser) {
-        List<Action> actions = new ArrayList<>();
-        for (int i = 0; i < actionsString.size(); i++) {
-            actions.add(mapToAction(actionsString.get(i), appUser));
-        }
-        return actions;
-    }
 
     private Action mapToAction(String action, AppUser appUser){
         return new Action(LocalDateTime.now(), action, appUser);
