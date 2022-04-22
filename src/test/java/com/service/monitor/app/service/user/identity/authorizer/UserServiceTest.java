@@ -48,7 +48,7 @@ public class UserServiceTest {
 
         AppUser receivedAppUser = userService.findOrCreateUser(Optional.empty(), tokenAsAdress);
         System.out.println(receivedAppUser.ipAdresses.size());
-        Assert.assertEquals(tokenAsAdress, receivedAppUser.ipAdresses.get(0).getAdress());
+        Assert.assertEquals(appUser.id, receivedAppUser.id);
     }
 
     @Test
@@ -56,10 +56,9 @@ public class UserServiceTest {
         String tokenAsAdress = tokenGenerator.generate();
         AppUser appUser = new AppUser(true, "",tokenAsAdress, LocalDateTime.now());
         userRepository.save(appUser);
-        long originalUserId = appUser.id;
 
         AppUser receivedAppUser = userService.findOrCreateUser(Optional.empty(), tokenAsAdress);
-        Assert.assertNotEquals(originalUserId, receivedAppUser.id);
+        Assert.assertNotEquals(appUser.id, receivedAppUser.id);
     }
 
     @Test

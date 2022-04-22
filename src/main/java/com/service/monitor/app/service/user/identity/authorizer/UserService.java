@@ -59,7 +59,7 @@ public class UserService {
     private Optional<AppUser> getUserWithoutCookiesByAdress(IPAdress ipAdress){
         AppUser appUser = ipAdress.getAppUser();
         if(appUser != null){
-            if(appUser.withCookies) {
+            if( ! appUser.withCookies) {
                 return Optional.of(appUser);
             }
         }

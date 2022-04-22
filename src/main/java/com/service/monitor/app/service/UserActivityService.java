@@ -3,7 +3,6 @@ package com.service.monitor.app.service;
 import com.service.monitor.app.domain.Action;
 import com.service.monitor.app.domain.Contact;
 import com.service.monitor.app.domain.dto.ContactDto;
-import com.service.monitor.app.domain.dto.PulseDto;
 import com.service.monitor.app.domain.AppUser;
 import com.service.monitor.app.repository.UserRepository;
 import com.service.monitor.app.service.user.identity.authorizer.UserIdentityAuthorizer;

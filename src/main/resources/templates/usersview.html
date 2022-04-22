@@ -13,6 +13,7 @@
                 <span th:text="${user.numberOfActions}"></span>
                 <span th:text="${user.contacts}"></span>
                 <span th:text="${user.lastActive}"></span>
+                <span th:text="${user.id}"></span>
                 <span><a th:href="@{/action_list/{id}(id=${user.id})}">Actions</a>
                 <a th:href="@{/contacts_list/{id}(id=${user.id})}">Contacts</a>
                 <a th:href="@{/adresses_list/{id}(id=${user.id})}">IPs</a></span>

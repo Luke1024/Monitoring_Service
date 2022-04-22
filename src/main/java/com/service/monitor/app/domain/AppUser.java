@@ -30,6 +30,7 @@ public class AppUser {
     }
 
     public AppUser(boolean withCookies, String token, String ipAdress, LocalDateTime lastActive) {
+        this.withCookies = withCookies;
         this.ipAdresses.add(new IPAdress(LocalDateTime.now(), ipAdress, this));
         this.token = token;
         this.lastActive = lastActive;
