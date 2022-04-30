@@ -47,7 +47,7 @@ public class UserActivityService {
     }
 
     private void saveAction(String action, AppUser user){
-        user.actions.add(mapToAction(action, user));
+        user.addAction(action);
         user.updateLastActive();
         userRepository.save(user);
     }

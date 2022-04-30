@@ -1,7 +1,6 @@
 package com.service.monitor.app.controller;
 
 import com.service.monitor.app.domain.dto.ContactDto;
-import com.service.monitor.app.domain.dto.PulseDto;
 import com.service.monitor.app.domain.dto.StringDto;
 import com.service.monitor.app.service.UserActivityService;
 import com.service.monitor.app.service.user.identity.authorizer.UserIdentityAuthorizer;
@@ -14,6 +13,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+//@CrossOrigin(origins = "https://luke1024.github.io", allowCredentials = "true")
 @CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
 @RestController
 @RequestMapping("/input")

@@ -7,7 +7,6 @@ public class Contact {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @OrderColumn
     private long id;
     private String name;
     private String email;

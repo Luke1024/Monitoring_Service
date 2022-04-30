@@ -8,7 +8,6 @@ public class IPAdress {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @OrderColumn
     private long id;
     private LocalDateTime firstUsed;
     private String adress;

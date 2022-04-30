@@ -36,6 +36,10 @@ public class AppUser {
         this.lastActive = lastActive;
     }
 
+    public void addAction(String action) {
+        actions.add(new Action(LocalDateTime.now(),action,this));
+    }
+
     public void updateLastActive() {
         if(actions.size()>0){
             Action lastAction = actions.get(actions.size()-1);

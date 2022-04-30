@@ -52,11 +52,18 @@ public class UserIdentityAuthorizer {
     private void generateNewToken(HttpServletResponse response){
         String tokenNew = tokenGenerator.generate();
         userService.addTokenToPreAuth(tokenNew);
-        Cookie cookie = new Cookie(authCookieName, tokenNew);
-        cookie.setHttpOnly(true);
-        cookie.setMaxAge(15000000);
-        response.addCookie(cookie);
+        //Cookie cookie = new Cookie(authCookieName, tokenNew);
+        //cookie.setHttpOnly(true);
+        //cookie.setMaxAge(15000000);
+        //cookie.setSecure(true);
+        //setCookieSameSite(response);
+        //response.addCookie(cookie);
+        response.addHeader("Set-Cookie", authCookieName + "=" + tokenNew + "; Max-Age=15000000; Secure; HttpOnly; SameSite=None");
     }
+
+    //private setCookieSameSite(HttpServletResponse response){
+      //  response.setHeader("");
+    //}
 
     private Optional<String> filterValidCookiesToToken(Cookie[] cookies){
         List<String> tokenList = new ArrayList<>();
