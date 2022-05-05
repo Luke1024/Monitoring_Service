@@ -69,7 +69,7 @@ public class UserService {
     private Optional<AppUser> filterMultipleUsers(List<AppUser> appUsers){
         if(appUsers.size() > 0){
             if(appUsers.size() > 1){
-                LOGGER.warn("Multiple users without cookies on the same adress detected.");
+                //LOGGER.warn("Multiple users without cookies on the same adress detected.");
             }
             return Optional.of(appUsers.get(0));
         }
@@ -95,6 +95,7 @@ public class UserService {
             user = new AppUser(false, tokenReplacementWhenCookiesSwitchOff, ipAdress, LocalDateTime.now());
         }
         userRepository.save(user);
+        LOGGER.info("Authorized new user with token: " + user.token);
         return user;
     }
 

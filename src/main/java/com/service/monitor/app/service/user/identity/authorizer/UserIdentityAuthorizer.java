@@ -29,14 +29,12 @@ public class UserIdentityAuthorizer {
     public void preAuth(Cookie[] cookies, HttpServletResponse response){
         Optional<String> token = filterValidCookiesToToken(cookies);
         if(token.isPresent()){
-            LOGGER.info("Received token: " + token.get());
             Optional<AppUser> appUser = findUserByToken(token.get());
             if(appUser.isPresent()){
                 LOGGER.info("User found with token: " + token.get());
                 return;
             }
         }
-        LOGGER.info("Generating new token.");
         generateNewToken(response);
     }
 
@@ -58,12 +56,12 @@ public class UserIdentityAuthorizer {
         //cookie.setSecure(true);
         //setCookieSameSite(response);
         //response.addCookie(cookie);
-        response.addHeader("Set-Cookie", authCookieName + "=" + tokenNew + "; Max-Age=15000000; Secure; HttpOnly; SameSite=None");
+        response.addHeader("Set-Cookie", cookieGenerator(authCookieName, tokenNew));
     }
 
-    //private setCookieSameSite(HttpServletResponse response){
-      //  response.setHeader("");
-    //}
+    protected String cookieGenerator(String authCookieName, String token){
+        return authCookieName + "=" + token + "; Max-Age=15000000; Secure; HttpOnly; SameSite=None";
+    }
 
     private Optional<String> filterValidCookiesToToken(Cookie[] cookies){
         List<String> tokenList = new ArrayList<>();

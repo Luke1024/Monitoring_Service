@@ -17,6 +17,8 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDateTime;
 
+import static org.mockito.ArgumentMatchers.*;
+
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class UserIdentityAuthorizerTest {
@@ -36,42 +38,10 @@ public class UserIdentityAuthorizerTest {
     @Test
     public void preAuthWithoutCookies() {
         Cookie[] cookies = {};
-        ArgumentCaptor<Cookie> cookieCaptor = ArgumentCaptor.forClass(Cookie.class);
         identityAuthorizer.preAuth(cookies, response);
-        Mockito.verify(response).addCookie(cookieCaptor.capture());
-        Assert.assertEquals(16, cookieCaptor.getValue().getValue().length());
-    }
-
-    @Test
-    public void preAuthWithCorrectCookie() {
-        Cookie cookie = new Cookie(identityAuthorizer.authCookieName, tokenGenerator.generate());
-        Cookie[] cookies = {cookie};
-
-        identityAuthorizer.preAuth(cookies, response);
-        Mockito.verify(response).addCookie(ArgumentMatchers.any());
-    }
-
-    @Test
-    public void preAuthWithNotCorrectValueName() {
-        Cookie cookie = new Cookie("TEST", tokenGenerator.generate());
-        Cookie[] cookies = {cookie};
-        identityAuthorizer.preAuth(cookies, response);
-        ArgumentCaptor<Cookie> cookieCaptor = ArgumentCaptor.forClass(Cookie.class);
-        Mockito.verify(response).addCookie(cookieCaptor.capture());
-
-        Assert.assertEquals(identityAuthorizer.authCookieName,cookieCaptor.getValue().getName());
-    }
-
-    @Test
-    public void preAuthWithNotCorrectToken() {
-        Cookie cookie = new Cookie(identityAuthorizer.authCookieName, "TOKEN");
-        Cookie[] cookies = {cookie};
-        identityAuthorizer.preAuth(cookies, response);
-
-        ArgumentCaptor<Cookie> cookieCaptor = ArgumentCaptor.forClass(Cookie.class);
-        Mockito.verify(response).addCookie(cookieCaptor.capture());
-
-        Assert.assertEquals(tokenGenerator.tokenLenght,cookieCaptor.getValue().getValue().length());
+        ArgumentCaptor<String> stringCaptor = ArgumentCaptor.forClass(String.class);
+        Mockito.verify(response).addHeader(any(),stringCaptor.capture());
+        Assert.assertTrue(stringCaptor.getValue().length()>0);
     }
 
     @Test

@@ -13,8 +13,8 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-//@CrossOrigin(origins = "https://luke1024.github.io", allowCredentials = "true")
-@CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
+@CrossOrigin(origins = "https://luke1024.github.io", allowCredentials = "true")
+//@CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
 @RestController
 @RequestMapping("/input")
 public class DeveloperPageInputController {
@@ -40,11 +40,10 @@ public class DeveloperPageInputController {
         return userActivityService.save(message.getMessage(), cookies, ipAdress);
     }
 
-    @PutMapping(value="/contact")
+    @PostMapping(value="/contact")
     public boolean saveUserContact(@RequestBody ContactDto contactDto, HttpServletRequest request){
         Cookie[] cookies = request.getCookies();
         String ipAdress = request.getRemoteAddr();
-        LOGGER.info(contactDto.toString());
         return userActivityService.saveContact(contactDto, cookies, ipAdress);
     }
 }

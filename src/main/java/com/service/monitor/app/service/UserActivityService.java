@@ -43,6 +43,7 @@ public class UserActivityService {
                         appUser));
 
         userRepository.save(appUser);
+        LOGGER.info("Contact added: " + contactDto.toString() + ", by user with id:" + appUser.id + ", token: " + appUser.token);
         return true;
     }
 
