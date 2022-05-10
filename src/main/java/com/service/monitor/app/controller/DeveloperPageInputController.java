@@ -3,7 +3,7 @@ package com.service.monitor.app.controller;
 import com.service.monitor.app.domain.dto.ContactDto;
 import com.service.monitor.app.domain.dto.StringDto;
 import com.service.monitor.app.service.UserActivityService;
-import com.service.monitor.app.service.user.identity.authorizer.UserIdentityAuthorizer;
+import com.service.monitor.app.service.user.identity.authorizer.PreAuthService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,17 +23,17 @@ public class DeveloperPageInputController {
     private UserActivityService userActivityService;
 
     @Autowired
-    private UserIdentityAuthorizer identityAuthorizer;
+    private PreAuthService identityAuthorizer;
 
     private Logger LOGGER = LoggerFactory.getLogger(DeveloperPageInputController.class);
 
     @GetMapping(value="/auth")
     public void getToken(HttpServletRequest request, HttpServletResponse response){
-        identityAuthorizer.preAuth(request.getCookies(), response);
+        userActivityService.preAuth(request.getCookies(), response);
     }
 
     @PostMapping(value="/load")
-    public boolean loadUserData(@RequestBody StringDto message, HttpServletRequest request){
+    public boolean loadUserData(@RequestBody StringDto message, HttpServletRequest request, HttpServletResponse response){
         Cookie[] cookies = request.getCookies();
         String ipAdress = request.getRemoteAddr();
         LOGGER.info(message.getMessage() + " " + request.getRemoteAddr());

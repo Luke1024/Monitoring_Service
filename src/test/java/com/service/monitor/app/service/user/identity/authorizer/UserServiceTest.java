@@ -2,6 +2,7 @@ package com.service.monitor.app.service.user.identity.authorizer;
 
 import com.service.monitor.app.domain.AppUser;
 import com.service.monitor.app.repository.UserRepository;
+import com.service.monitor.app.service.user.identity.authorizer.user.service.UserService;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,7 +21,7 @@ public class UserServiceTest {
     private SecureRandom random = new SecureRandom();
 
     @Autowired
-    private UserIdentityAuthorizer identityAuthorizer;
+    private PreAuthService identityAuthorizer;
 
     @Autowired
     private UserService userService;
@@ -29,11 +30,11 @@ public class UserServiceTest {
     private UserRepository userRepository;
 
     @Autowired
-    private TokenGenerator tokenGenerator;
+    private TokenService tokenService;
 
     @Test
     public void findUserByToken() {
-        String token = tokenGenerator.generate();
+        String token = tokenService.generate();
         AppUser appUser = new AppUser(true, token,"", LocalDateTime.now());
         userRepository.save(appUser);
 
@@ -42,7 +43,7 @@ public class UserServiceTest {
 
     @Test
     public void findUserByIpAdressWithoutCookes() {
-        String tokenAsAdress = tokenGenerator.generate();
+        String tokenAsAdress = tokenService.generate();
         AppUser appUser = new AppUser(false, "",tokenAsAdress, LocalDateTime.now());
         userRepository.save(appUser);
 
@@ -53,7 +54,7 @@ public class UserServiceTest {
 
     @Test
     public void tryToFindUserWithIpAdressWithCookies() {
-        String tokenAsAdress = tokenGenerator.generate();
+        String tokenAsAdress = tokenService.generate();
         AppUser appUser = new AppUser(true, "",tokenAsAdress, LocalDateTime.now());
         userRepository.save(appUser);
 
@@ -63,7 +64,7 @@ public class UserServiceTest {
 
     @Test
     public void createUserWithToken() {
-        String token = tokenGenerator.generate();
+        String token = tokenService.generate();
         userService.addTokenToPreAuth(token);
 
         AppUser appUser = userService.findOrCreateUser(Optional.of(token), "");
@@ -72,7 +73,7 @@ public class UserServiceTest {
 
     @Test
     public void createUserWithAdress() {
-        String tokenAsAdress = tokenGenerator.generate();
+        String tokenAsAdress = tokenService.generate();
 
         AppUser appUser = userService.findOrCreateUser(Optional.empty(), tokenAsAdress);
 

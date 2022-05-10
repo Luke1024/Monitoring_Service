@@ -6,7 +6,6 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
-import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,13 +20,13 @@ import static org.mockito.ArgumentMatchers.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class UserIdentityAuthorizerTest {
+public class PreAuthServiceTest {
 
     @Autowired
-    private UserIdentityAuthorizer identityAuthorizer;
+    private PreAuthService identityAuthorizer;
 
     @Autowired
-    private TokenGenerator tokenGenerator;
+    private TokenService tokenService;
 
     @Autowired
     private UserRepository userRepository;
@@ -46,7 +45,7 @@ public class UserIdentityAuthorizerTest {
 
     @Test
     public void preAuthWithUserWithCorrectTokenInDatabase() {
-        String token = tokenGenerator.generate();
+        String token = tokenService.generate();
         AppUser appUser = new AppUser(true, token, "", LocalDateTime.now());
         userRepository.save(appUser);
 

@@ -11,15 +11,15 @@ public class Action {
     private LocalDateTime timeStamp;
     private String action;
     @ManyToOne
-    @JoinColumn(name="APPUSER_ID")
-    private AppUser appUser;
+    @JoinColumn(name="SESSION_ID")
+    private UserSession userSession;
 
     public Action() { }
 
-    public Action(LocalDateTime timeStamp, String action, AppUser appUser) {
+    public Action(LocalDateTime timeStamp, String action, UserSession userSession) {
         this.timeStamp = timeStamp;
         this.action = action;
-        this.appUser = appUser;
+        this.userSession = userSession;
     }
 
     public Long getId() {
@@ -34,7 +34,7 @@ public class Action {
         return action;
     }
 
-    public AppUser getAppUser() {
-        return appUser;
+    public UserSession getUserSession() {
+        return userSession;
     }
 }
