@@ -35,6 +35,7 @@ public class TokenService {
     public boolean checkIfTokenWasGeneratedInAuthAndRemove(String token){
         int index = tokensInPreAuth.indexOf(token);
         if(index != -1) {
+            System.out.println("removing token");
             tokensInPreAuth.remove(index);
             return true;
         } else return false;

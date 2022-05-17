@@ -35,40 +35,40 @@ public class UserServiceTest {
     @Test
     public void findUserByToken() {
         String token = tokenService.generate();
-        AppUser appUser = new AppUser(true, token,"", LocalDateTime.now());
+        AppUser appUser = new AppUser(token,"", LocalDateTime.now());
         userRepository.save(appUser);
 
-        Assert.assertEquals(appUser.token, userService.findUserByToken(token).get().token);
+        Assert.assertEquals(appUser.getToken(), userService.findUserByToken(token).get().getToken());
     }
 
     @Test
     public void findUserByIpAdressWithoutCookes() {
         String tokenAsAdress = tokenService.generate();
-        AppUser appUser = new AppUser(false, "",tokenAsAdress, LocalDateTime.now());
+        AppUser appUser = new AppUser("",tokenAsAdress, LocalDateTime.now());
         userRepository.save(appUser);
 
         AppUser receivedAppUser = userService.findOrCreateUser(Optional.empty(), tokenAsAdress);
-        System.out.println(receivedAppUser.ipAdresses.size());
-        Assert.assertEquals(appUser.id, receivedAppUser.id);
+        System.out.println(receivedAppUser.getIpAdresses().size());
+        Assert.assertEquals(appUser.getId(), receivedAppUser.getId());
     }
 
     @Test
     public void tryToFindUserWithIpAdressWithCookies() {
         String tokenAsAdress = tokenService.generate();
-        AppUser appUser = new AppUser(true, "",tokenAsAdress, LocalDateTime.now());
+        AppUser appUser = new AppUser("",tokenAsAdress, LocalDateTime.now());
         userRepository.save(appUser);
 
         AppUser receivedAppUser = userService.findOrCreateUser(Optional.empty(), tokenAsAdress);
-        Assert.assertNotEquals(appUser.id, receivedAppUser.id);
+        Assert.assertNotEquals(appUser.getId(), receivedAppUser.getId());
     }
 
     @Test
     public void createUserWithToken() {
         String token = tokenService.generate();
-        userService.addTokenToPreAuth(token);
+        tokenService.addTokenToPreAuth(token);
 
         AppUser appUser = userService.findOrCreateUser(Optional.of(token), "");
-        Assert.assertEquals(token, appUser.token);
+        Assert.assertEquals(token, appUser.getToken());
     }
 
     @Test
@@ -77,7 +77,7 @@ public class UserServiceTest {
 
         AppUser appUser = userService.findOrCreateUser(Optional.empty(), tokenAsAdress);
 
-        Assert.assertEquals(tokenAsAdress, appUser.ipAdresses.get(0).getAdress());
-        Assert.assertEquals(false, appUser.withCookies);
+        Assert.assertEquals(tokenAsAdress, appUser.getIpAdresses().get(0).getAdress());
+        Assert.assertEquals("", appUser.getToken());
     }
 }

@@ -1,10 +1,10 @@
 package com.service.monitor.app.service;
 
 import com.service.monitor.app.domain.Contact;
-import com.service.monitor.app.domain.UserSession;
 import com.service.monitor.app.domain.dto.ContactDto;
 import com.service.monitor.app.domain.AppUser;
 import com.service.monitor.app.repository.SessionRepository;
+import com.service.monitor.app.service.user.identity.authorizer.CookieFilter;
 import com.service.monitor.app.service.user.identity.authorizer.PreAuthService;
 import com.service.monitor.app.service.user.identity.authorizer.SessionManager;
 import com.service.monitor.app.service.user.identity.authorizer.user.service.UserService;
@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Optional;
 import java.util.Random;
 
 @Service
@@ -34,6 +35,9 @@ public class UserActivityService {
     @Autowired
     private SessionRepository sessionRepository;
 
+    @Autowired
+    private CookieFilter cookieFilter = new CookieFilter();
+
     private Logger LOGGER = LoggerFactory.getLogger(UserActivityService.class);
 
     public void preAuth(Cookie[] cookies, HttpServletResponse response) {
@@ -42,7 +46,8 @@ public class UserActivityService {
 
     public boolean save(String action, Cookie[] cookies, String ipAdress) {
         AppUser appUser = userService.auth(cookies, ipAdress);
-        sessionManager.addSessionIfNecessary(appUser, cookies);
+        Optional<String> sessionToken = cookieFilter.filterCookiesToValue(cookies, cookieFilter.sessionCookieName);
+        sessionManager.addSessionIfNecessary(appUser, sessionToken);
         appUser.getLastSession().get().addAction(action);
         return true;
     }
@@ -55,7 +60,8 @@ public class UserActivityService {
                         appUser);
 
         userService.saveContact(appUser, contact);
-        LOGGER.info("Contact added: " + contactDto.toString() + ", by user with id:" + appUser.getId() + ", token: " + appUser.getToken());
+        LOGGER.info("Contact added: " + contactDto.toString() + ", by user with id:" +
+                appUser.getId() + ", token: " + appUser.getToken());
         return true;
     }
 }

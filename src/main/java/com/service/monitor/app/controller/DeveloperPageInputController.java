@@ -13,8 +13,8 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@CrossOrigin(origins = "https://luke1024.github.io", allowCredentials = "true")
-//@CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
+//@CrossOrigin(origins = "https://luke1024.github.io", allowCredentials = "true")
+@CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
 @RestController
 @RequestMapping("/input")
 public class DeveloperPageInputController {

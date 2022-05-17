@@ -61,7 +61,7 @@ public class PreAuthService {
         return authCookieName + "=" + token + "; Max-Age=15000000; Secure; HttpOnly; SameSite=None";
     }
 
-    private void generateNewSession(HttpServletResponse response){
+    void generateNewSession(HttpServletResponse response){
         String tokenNew = tokenService.generate();
         tokenService.addTokenToPreAuth(tokenNew);
         response.addHeader("Set-Cookie", sessionCookieGenerator(cookieFilter.sessionCookieName, tokenNew));

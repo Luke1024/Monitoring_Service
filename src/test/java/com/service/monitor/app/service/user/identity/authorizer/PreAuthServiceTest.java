@@ -31,6 +31,9 @@ public class PreAuthServiceTest {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private CookieFilter cookieFilter;
+
     @Mock
     HttpServletResponse response;
 
@@ -46,10 +49,10 @@ public class PreAuthServiceTest {
     @Test
     public void preAuthWithUserWithCorrectTokenInDatabase() {
         String token = tokenService.generate();
-        AppUser appUser = new AppUser(true, token, "", LocalDateTime.now());
+        AppUser appUser = new AppUser(token, "", LocalDateTime.now());
         userRepository.save(appUser);
 
-        Cookie cookie = new Cookie(identityAuthorizer.authCookieName, token);
+        Cookie cookie = new Cookie(cookieFilter.authCookieName, token);
         Cookie[] cookies = {cookie};
         identityAuthorizer.preAuth(cookies, response);
 
