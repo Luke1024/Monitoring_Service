@@ -36,7 +36,6 @@ public class DeveloperPageInputController {
     public boolean loadUserData(@RequestBody StringDto message, HttpServletRequest request, HttpServletResponse response){
         Cookie[] cookies = request.getCookies();
         String ipAdress = request.getRemoteAddr();
-        LOGGER.info(message.getMessage() + " " + request.getRemoteAddr());
         return userActivityService.save(message.getMessage(), cookies, ipAdress);
     }
 

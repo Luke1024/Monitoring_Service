@@ -10,7 +10,7 @@ public class Action {
     private Long id;
     private LocalDateTime timeStamp;
     private String action;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="SESSION_ID")
     private UserSession userSession;
 

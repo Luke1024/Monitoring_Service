@@ -15,13 +15,13 @@ public class AppUser {
     @OrderColumn
     private long id;
     private String token;
-    @OneToMany(targetEntity = UserSession.class, cascade = CascadeType.ALL)
+    @OneToMany(targetEntity = UserSession.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @OrderColumn
     private List<UserSession> sessions = new ArrayList<>();
-    @OneToMany(targetEntity = Contact.class, cascade = CascadeType.ALL)
+    @OneToMany(targetEntity = Contact.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @OrderColumn
     private List<Contact> contacts = new ArrayList<>();
-    @OneToMany(targetEntity = IPAdress.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(targetEntity = IPAdress.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @OrderColumn
     private List<IPAdress> ipAdresses = new ArrayList<>();
     private LocalDateTime lastActive;

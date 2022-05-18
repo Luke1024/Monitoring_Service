@@ -11,7 +11,7 @@ public class IPAdress {
     private long id;
     private LocalDateTime firstUsed;
     private String adress;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="APPUSER_ID")
     private AppUser appUser;
 

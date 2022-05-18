@@ -49,6 +49,7 @@ public class UserActivityService {
         Optional<String> sessionToken = cookieFilter.filterCookiesToValue(cookies, cookieFilter.sessionCookieName);
         sessionManager.addSessionIfNecessary(appUser, sessionToken);
         appUser.getLastSession().get().addAction(action);
+        userService.save(appUser);
         return true;
     }
 

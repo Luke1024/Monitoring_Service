@@ -23,7 +23,6 @@ public class UserService {
     private IPAdressRepository adressRepository;
     private Logger LOGGER = LoggerFactory.getLogger(UserService.class);
 
-
     @Autowired
     private CookieFilter cookieFilter;
 
