@@ -4,12 +4,20 @@ package com.service.monitor.app.service.user.identity.authorizer;
 import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
-public class TokenGenerator {
+public class TokenService {
 
     private SecureRandom random = new SecureRandom();
-    protected int tokenLenght = 16;
+    int tokenLenght = 16;
+    private List<String> tokensInPreAuth = new ArrayList<>();
+    public String tokenReplacementWhenCookiesSwitchOff = "";
+
+    public void addTokenToPreAuth(String token){
+        tokensInPreAuth.add(token);
+    }
 
     public String generate(){
         int leftLimit = 97;
@@ -22,5 +30,13 @@ public class TokenGenerator {
             buffer.append((char) randomLimitedInt);
         }
         return buffer.toString();
+    }
+
+    public boolean checkIfTokenWasGeneratedInAuthAndRemove(String token){
+        int index = tokensInPreAuth.indexOf(token);
+        if(index != -1) {
+            tokensInPreAuth.remove(index);
+            return true;
+        } else return false;
     }
 }

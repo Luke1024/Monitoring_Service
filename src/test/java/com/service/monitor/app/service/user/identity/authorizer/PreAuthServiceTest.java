@@ -6,7 +6,6 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
-import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,16 +20,19 @@ import static org.mockito.ArgumentMatchers.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class UserIdentityAuthorizerTest {
+public class PreAuthServiceTest {
 
     @Autowired
-    private UserIdentityAuthorizer identityAuthorizer;
+    private PreAuthService identityAuthorizer;
 
     @Autowired
-    private TokenGenerator tokenGenerator;
+    private TokenService tokenService;
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private CookieFilter cookieFilter;
 
     @Mock
     HttpServletResponse response;
@@ -46,11 +48,11 @@ public class UserIdentityAuthorizerTest {
 
     @Test
     public void preAuthWithUserWithCorrectTokenInDatabase() {
-        String token = tokenGenerator.generate();
-        AppUser appUser = new AppUser(true, token, "", LocalDateTime.now());
+        String token = tokenService.generate();
+        AppUser appUser = new AppUser(token, "", LocalDateTime.now());
         userRepository.save(appUser);
 
-        Cookie cookie = new Cookie(identityAuthorizer.authCookieName, token);
+        Cookie cookie = new Cookie(cookieFilter.authCookieName, token);
         Cookie[] cookies = {cookie};
         identityAuthorizer.preAuth(cookies, response);
 
