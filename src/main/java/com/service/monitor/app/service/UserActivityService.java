@@ -1,9 +1,9 @@
 package com.service.monitor.app.service;
 
 import com.service.monitor.app.domain.Contact;
+import com.service.monitor.app.domain.UserSession;
 import com.service.monitor.app.domain.dto.ContactDto;
 import com.service.monitor.app.domain.AppUser;
-import com.service.monitor.app.repository.SessionRepository;
 import com.service.monitor.app.service.user.identity.authorizer.CookieFilter;
 import com.service.monitor.app.service.user.identity.authorizer.PreAuthService;
 import com.service.monitor.app.service.user.identity.authorizer.SessionManager;
@@ -33,9 +33,6 @@ public class UserActivityService {
     private SessionManager sessionManager;
 
     @Autowired
-    private SessionRepository sessionRepository;
-
-    @Autowired
     private CookieFilter cookieFilter = new CookieFilter();
 
     private Logger LOGGER = LoggerFactory.getLogger(UserActivityService.class);
@@ -48,9 +45,13 @@ public class UserActivityService {
         AppUser appUser = userService.auth(cookies, ipAdress);
         Optional<String> sessionToken = cookieFilter.filterCookiesToValue(cookies, cookieFilter.sessionCookieName);
         sessionManager.addSessionIfNecessary(appUser, sessionToken);
+        addActionToLastSession(appUser,action);
+        return true;
+    }
+
+    private void addActionToLastSession(AppUser appUser,String action){
         appUser.getLastSession().get().addAction(action);
         userService.save(appUser);
-        return true;
     }
 
     public boolean saveContact(ContactDto contactDto, Cookie[] cookies, String ipAdress) {

@@ -15,13 +15,13 @@ public class AppUser {
     @OrderColumn
     private long id;
     private String token;
-    @OneToMany(targetEntity = UserSession.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(targetEntity = UserSession.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @OrderColumn
     private List<UserSession> sessions = new ArrayList<>();
-    @OneToMany(targetEntity = Contact.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(targetEntity = Contact.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @OrderColumn
     private List<Contact> contacts = new ArrayList<>();
-    @OneToMany(targetEntity = IPAdress.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(targetEntity = IPAdress.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @OrderColumn
     private List<IPAdress> ipAdresses = new ArrayList<>();
     private LocalDateTime lastActive;
@@ -33,6 +33,12 @@ public class AppUser {
         this.ipAdresses.add(new IPAdress(LocalDateTime.now(), ipAdress, this));
         this.token = token;
         this.lastActive = lastActive;
+    }
+
+    public Optional<UserSession> getLastSession(){
+        if(sessions.size()>0){
+            return Optional.of(sessions.get(sessions.size()-1));
+        } else return Optional.empty();
     }
 
     public void addSession(String sessionToken){
@@ -53,12 +59,6 @@ public class AppUser {
 
     public List<UserSession> getSessions() {
         return sessions;
-    }
-
-    public Optional<UserSession> getLastSession() {
-        if(sessions.size()>0){
-            return Optional.of(sessions.get(sessions.size()-1));
-        } else return Optional.empty();
     }
 
     public List<Contact> getContacts() {

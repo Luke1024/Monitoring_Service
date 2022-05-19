@@ -14,12 +14,12 @@ public class UserSession {
     @OrderColumn
     private long id;
     private String sessionToken;
-    @OneToMany(targetEntity = Action.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(targetEntity = Action.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @OrderColumn
     private List<Action> actions = new ArrayList<>();
     private LocalDateTime started;
     private LocalDateTime lastActive;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name="APPUSER_ID")
     private AppUser appUser;
 
