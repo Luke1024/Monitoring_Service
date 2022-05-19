@@ -1,7 +1,7 @@
 package com.service.monitor.app.service.user.identity.authorizer.user.service;
 
 import com.service.monitor.app.domain.AppUser;
-import com.service.monitor.app.repository.UserRepository;
+import com.service.monitor.app.repository.CachedRepository;
 import com.service.monitor.app.service.user.identity.authorizer.TokenService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +15,7 @@ import java.util.Optional;
 public class UserCreator {
 
     @Autowired
-    private UserRepository userRepository;
+    private CachedRepository cachedRepository;
 
     @Autowired
     private TokenService tokenService;
@@ -32,7 +32,7 @@ public class UserCreator {
         } else {
             user = new AppUser(tokenService.tokenReplacementWhenCookiesSwitchOff, ipAdress, LocalDateTime.now());
         }
-        userRepository.save(user);
+        cachedRepository.saveUser(user);
         LOGGER.info("Authorized new user with token: " + user.getToken());
         return user;
     }

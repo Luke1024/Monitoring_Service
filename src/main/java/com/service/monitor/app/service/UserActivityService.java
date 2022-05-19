@@ -50,7 +50,6 @@ public class UserActivityService {
 
     private void addActionToLastSession(AppUser appUser,String action){
         appUser.getLastSession().get().addAction(action);
-        userService.save(appUser);
     }
 
     public boolean saveContact(ContactDto contactDto, Cookie[] cookies, String ipAdress) {

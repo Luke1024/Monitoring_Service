@@ -2,6 +2,7 @@ package com.service.monitor.app.service.user.identity.authorizer.user.service;
 
 import com.service.monitor.app.domain.AppUser;
 import com.service.monitor.app.domain.Contact;
+import com.service.monitor.app.repository.CachedRepository;
 import com.service.monitor.app.repository.IPAdressRepository;
 import com.service.monitor.app.repository.UserRepository;
 import com.service.monitor.app.service.user.identity.authorizer.CookieFilter;
@@ -17,11 +18,7 @@ import java.util.Optional;
 public class UserService {
 
     @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private IPAdressRepository adressRepository;
-    private Logger LOGGER = LoggerFactory.getLogger(UserService.class);
+    private CachedRepository cachedRepository;
 
     @Autowired
     private CookieFilter cookieFilter;
@@ -33,7 +30,7 @@ public class UserService {
     private UserCreator userCreator;
 
     public void save(AppUser user){
-        userRepository.save(user);
+        cachedRepository.saveUser(user);
     }
 
     public void saveContact(AppUser appUser, Contact contact){

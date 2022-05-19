@@ -1,31 +1,31 @@
 package com.service.monitor.app.service.user.identity.authorizer.user.service;
 
 import com.service.monitor.app.domain.AppUser;
-import com.service.monitor.app.domain.IPAdress;
-import com.service.monitor.app.repository.IPAdressRepository;
-import com.service.monitor.app.repository.UserRepository;
+import com.service.monitor.app.repository.CachedRepository;
 import com.service.monitor.app.service.user.identity.authorizer.TokenService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class UserFinder {
 
     @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private IPAdressRepository adressRepository;
+    private CachedRepository cachedRepository;
 
     @Autowired
     private TokenService tokenService;
 
+    private Logger logger = LoggerFactory.getLogger(UserFinder.class);
+
     public Optional<AppUser> findUserByToken(String token){
-        return userRepository.findByToken(token);
+        return cachedRepository.findUserByToken(token);
     }
 
     public Optional<AppUser> findUser(Optional<String> token, String ipAdress){
@@ -38,30 +38,25 @@ public class UserFinder {
     }
 
     private Optional<AppUser> findUsersByIpAdressWithoutCookies(String ipAdress){
-        List<IPAdress> adresses = adressRepository.findByIpAdress(ipAdress);
-        List<AppUser> possibleUsers = new ArrayList<>();
-        for(IPAdress adress : adresses){
-            Optional<AppUser> appUserOptional = getUserWithoutCookiesByAdress(adress);
-            if(appUserOptional.isPresent()) {
-                possibleUsers.add(appUserOptional.get());
-            }
-        }
-        return filterMultipleUsers(possibleUsers);
+        Set<AppUser> usersWithRequiredIp = cachedRepository.findUserByIpAdress(ipAdress);
+        List<AppUser> usersWithoutCookies = getUsersWithoutCookies(usersWithRequiredIp);
+        return filterMultipleUsers(usersWithoutCookies);
     }
 
-    private Optional<AppUser> getUserWithoutCookiesByAdress(IPAdress ipAdress){
-        AppUser appUser = ipAdress.getAppUser();
-        if(appUser != null){
-            if(appUser.getToken().equals(tokenService.tokenReplacementWhenCookiesSwitchOff)) {
-                return Optional.of(appUser);
+    private List<AppUser> getUsersWithoutCookies(Set<AppUser> usersWithRequiredIp){
+        List<AppUser> usersWithoutCookies = new ArrayList<>();
+        for(AppUser appUser : usersWithRequiredIp){
+            if(appUser.getToken().equals("")){
+                usersWithoutCookies.add(appUser);
             }
         }
-        return Optional.empty();
+        return usersWithoutCookies;
     }
 
     private Optional<AppUser> filterMultipleUsers(List<AppUser> appUsers){
         if(appUsers.size() > 0){
             if(appUsers.size() > 1){
+                logger.info("Multiple users on same adress without cookies detected.");
             }
             return Optional.of(appUsers.get(0));
         }
