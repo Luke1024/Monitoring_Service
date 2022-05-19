@@ -1,7 +1,6 @@
 package com.service.monitor.app.service;
 
 import com.service.monitor.app.domain.Contact;
-import com.service.monitor.app.domain.UserSession;
 import com.service.monitor.app.domain.dto.ContactDto;
 import com.service.monitor.app.domain.AppUser;
 import com.service.monitor.app.service.user.identity.authorizer.CookieFilter;
