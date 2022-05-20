@@ -2,12 +2,9 @@ package com.service.monitor.app.service.user.identity.authorizer.user.service;
 
 import com.service.monitor.app.domain.AppUser;
 import com.service.monitor.app.domain.Contact;
-import com.service.monitor.app.repository.CachedRepository;
-import com.service.monitor.app.repository.IPAdressRepository;
-import com.service.monitor.app.repository.UserRepository;
+import com.service.monitor.app.repository.cached.repository.CachedRepository;
 import com.service.monitor.app.service.user.identity.authorizer.CookieFilter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

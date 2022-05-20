@@ -1,7 +1,7 @@
 package com.service.monitor.app.service.user.identity.authorizer.user.service;
 
 import com.service.monitor.app.domain.AppUser;
-import com.service.monitor.app.repository.CachedRepository;
+import com.service.monitor.app.repository.cached.repository.CachedRepository;
 import com.service.monitor.app.service.user.identity.authorizer.TokenService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,9 +38,8 @@ public class UserFinder {
     }
 
     private Optional<AppUser> findUsersByIpAdressWithoutCookies(String ipAdress){
-        Set<AppUser> usersWithRequiredIp = cachedRepository.findUserByIpAdress(ipAdress);
-        List<AppUser> usersWithoutCookies = getUsersWithoutCookies(usersWithRequiredIp);
-        return filterMultipleUsers(usersWithoutCookies);
+        Set<AppUser> usersWithRequiredIp = cachedRepository.findUserByIpAdressWithoutCookie(ipAdress);
+        return filterMultipleUsers(usersWithRequiredIp);
     }
 
     private List<AppUser> getUsersWithoutCookies(Set<AppUser> usersWithRequiredIp){
@@ -53,12 +52,12 @@ public class UserFinder {
         return usersWithoutCookies;
     }
 
-    private Optional<AppUser> filterMultipleUsers(List<AppUser> appUsers){
+    private Optional<AppUser> filterMultipleUsers(Set<AppUser> appUsers){
         if(appUsers.size() > 0){
             if(appUsers.size() > 1){
                 logger.info("Multiple users on same adress without cookies detected.");
             }
-            return Optional.of(appUsers.get(0));
+            return Optional.of(appUsers.toArray().);
         }
         return Optional.empty();
     }

@@ -1,11 +1,13 @@
 package com.service.monitor.app;
 
 import com.service.monitor.app.domain.AppUser;
+import com.service.monitor.app.repository.cached.repository.CachedRepository;
 import com.service.monitor.app.service.UserActivityService;
 import com.service.monitor.app.service.user.identity.authorizer.CookieFilter;
 import com.service.monitor.app.service.user.identity.authorizer.TokenService;
 import com.service.monitor.app.service.user.identity.authorizer.user.service.UserService;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -35,12 +37,16 @@ public class PerformanceTesting {
     @Autowired
     private CookieFilter cookieFilter;
 
+    @Autowired
+    private CachedRepository cachedRepository;
+
+    @Ignore
     @Test
     public void actionSaving(){
 
         long start = System.currentTimeMillis();
 
-        int actionSavingIterations = 1000;
+        int actionSavingIterations = 10000;
 
         String action = "gkahsgldyiafglagfsdogaosdgaodspaosdgpagd";
 
@@ -58,7 +64,10 @@ public class PerformanceTesting {
             activityService.save(action, cookies, "");
         }
 
+        //cachedRepository.updateDatabase();
+
         long finish = System.currentTimeMillis();
         Assert.assertEquals(0, finish-start);
+
     }
 }

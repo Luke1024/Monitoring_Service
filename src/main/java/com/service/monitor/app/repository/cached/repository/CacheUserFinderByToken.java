@@ -1,31 +1,20 @@
-package com.service.monitor.app.repository;
+package com.service.monitor.app.repository.cached.repository;
 
 import com.service.monitor.app.domain.AppUser;
-import com.service.monitor.app.domain.IPAdress;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.service.monitor.app.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.Optional;
 
 @Service
-public class CachedRepository {
-
-    private Logger logger = LoggerFactory.getLogger(CachedRepository.class);
+public class CacheUserFinderByToken {
 
     @Autowired
     private UserRepository userRepository;
 
     @Autowired
-    private IPAdressRepository adressRepository;
-
-    private List<AppUser> cachedUsers = new ArrayList<>();
-
-    public void saveUser(AppUser appUser){
-        userRepository.save(appUser);
-        logger.info("Creating user in database.");
-    }
+    private Cache cache;
 
     public Optional<AppUser> findUserByToken(String token){
         Optional<AppUser> userOptional = searchCacheByToken(token);
@@ -35,7 +24,7 @@ public class CachedRepository {
     }
 
     private Optional<AppUser> searchCacheByToken(String token){
-        for(AppUser appUser : cachedUsers){
+        for(AppUser appUser : cache.users){
             if(isAppUserWithCorrectToken(appUser,token)){
                 return Optional.of(appUser);
             }
@@ -50,20 +39,8 @@ public class CachedRepository {
     private Optional<AppUser> cacheUserByTokenIfExist(String token){
         Optional<AppUser> appUserOptional = userRepository.findByToken(token);
         if(appUserOptional.isPresent()){
-            cachedUsers.add(appUserOptional.get());
+            cache.users.add(appUserOptional.get());
             return appUserOptional;
         } else return Optional.empty();
-    }
-
-    public Set<AppUser> findUserByIpAdress(String ipAdress){
-
-        Set<AppUser> appUsers = new HashSet<>();
-
-        List<IPAdress> ipAdressList = adressRepository.findByIpAdress(ipAdress);
-
-        for(IPAdress adress : ipAdressList){
-            appUsers.add(adress.getAppUser());
-        }
-        return appUsers;
     }
 }
