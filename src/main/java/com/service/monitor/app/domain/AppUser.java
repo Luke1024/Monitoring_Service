@@ -21,16 +21,12 @@ public class AppUser {
     @OneToMany(targetEntity = Contact.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @OrderColumn
     private List<Contact> contacts = new ArrayList<>();
-    @OneToMany(targetEntity = IPAdress.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @OrderColumn
-    private List<IPAdress> ipAdresses = new ArrayList<>();
     private LocalDateTime lastActive;
 
     public AppUser() {
     }
 
-    public AppUser(String token, String ipAdress, LocalDateTime lastActive) {
-        this.ipAdresses.add(new IPAdress(LocalDateTime.now(), ipAdress, this));
+    public AppUser(String token, LocalDateTime lastActive) {
         this.token = token;
         this.lastActive = lastActive;
     }
@@ -63,10 +59,6 @@ public class AppUser {
 
     public List<Contact> getContacts() {
         return contacts;
-    }
-
-    public List<IPAdress> getIpAdresses() {
-        return ipAdresses;
     }
 
     public LocalDateTime getLastActive() {

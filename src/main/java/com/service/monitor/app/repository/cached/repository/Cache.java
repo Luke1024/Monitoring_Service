@@ -33,7 +33,7 @@ public class Cache {
         return users.size()>0;
     }
 
-    private void saveActiveUsersToDatabase(){
+    public void saveActiveUsersToDatabase(){
         userRepository.saveAll(users);
     }
 

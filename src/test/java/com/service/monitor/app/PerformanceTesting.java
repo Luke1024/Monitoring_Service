@@ -1,11 +1,13 @@
 package com.service.monitor.app;
 
 import com.service.monitor.app.domain.AppUser;
+import com.service.monitor.app.repository.UserRepository;
+import com.service.monitor.app.repository.cached.repository.Cache;
 import com.service.monitor.app.repository.cached.repository.CachedRepository;
 import com.service.monitor.app.service.UserActivityService;
 import com.service.monitor.app.service.user.identity.authorizer.CookieFilter;
 import com.service.monitor.app.service.user.identity.authorizer.TokenService;
-import com.service.monitor.app.service.user.identity.authorizer.user.service.UserService;
+import com.service.monitor.app.service.user.identity.authorizer.UserService;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -38,7 +40,10 @@ public class PerformanceTesting {
     private CookieFilter cookieFilter;
 
     @Autowired
-    private CachedRepository cachedRepository;
+    private Cache cache;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Ignore
     @Test
@@ -52,8 +57,9 @@ public class PerformanceTesting {
 
         String authToken = tokenService.generate();
         String sessionToken = tokenService.generate();
-        AppUser appUser = new AppUser(authToken,"", LocalDateTime.now());
-        userService.save(appUser);
+        AppUser appUser = new AppUser(authToken, LocalDateTime.now());
+
+        userRepository.save(appUser);
 
         Cookie authCookie = new Cookie(cookieFilter.authCookieName,authToken);
         Cookie sessionCookie = new Cookie(cookieFilter.sessionCookieName,sessionToken);
@@ -61,13 +67,12 @@ public class PerformanceTesting {
         Cookie[] cookies = {authCookie, sessionCookie};
 
         for(int i=0; i<actionSavingIterations; i++){
-            activityService.save(action, cookies, "");
+            activityService.save(action, cookies);
         }
 
-        //cachedRepository.updateDatabase();
+        cache.saveActiveUsersToDatabase();
 
         long finish = System.currentTimeMillis();
         Assert.assertEquals(0, finish-start);
-
     }
 }

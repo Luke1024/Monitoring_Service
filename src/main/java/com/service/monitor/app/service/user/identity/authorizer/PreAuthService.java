@@ -1,7 +1,6 @@
 package com.service.monitor.app.service.user.identity.authorizer;
 
 import com.service.monitor.app.domain.AppUser;
-import com.service.monitor.app.service.user.identity.authorizer.user.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

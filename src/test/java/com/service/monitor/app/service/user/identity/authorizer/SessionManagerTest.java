@@ -32,7 +32,7 @@ public class SessionManagerTest {
     @Test
     public void testingAddingSessionWhenCookiesSwitchOn(){
         String token = tokenService.generate();
-        AppUser appUser = new AppUser("","", LocalDateTime.now());
+        AppUser appUser = new AppUser("", LocalDateTime.now());
         sessionManager.addSessionIfNecessary(appUser, Optional.of(token));
 
         assertEquals(token, appUser.getLastSession().get().getSessionToken());
@@ -41,7 +41,7 @@ public class SessionManagerTest {
     @Test
     public void testAlreadyExistingSession(){
         String token = tokenService.generate();
-        AppUser appUser = new AppUser("", "", LocalDateTime.now());
+        AppUser appUser = new AppUser("", LocalDateTime.now());
         appUser.addSession(token);
         sessionManager.addSessionIfNecessary(appUser, Optional.of(token));
 
@@ -51,7 +51,7 @@ public class SessionManagerTest {
     @Test
     public void testCreateSessionWithSessionAlreadyExisting(){
         String token = tokenService.generate();
-        AppUser appUser = new AppUser("", "", LocalDateTime.now());
+        AppUser appUser = new AppUser("", LocalDateTime.now());
         appUser.addSession("");
         sessionManager.addSessionIfNecessary(appUser, Optional.of(token));
 

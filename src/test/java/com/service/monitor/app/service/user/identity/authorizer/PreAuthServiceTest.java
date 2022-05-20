@@ -49,7 +49,7 @@ public class PreAuthServiceTest {
     @Test
     public void preAuthWithUserWithCorrectTokenInDatabase() {
         String token = tokenService.generate();
-        AppUser appUser = new AppUser(token, "", LocalDateTime.now());
+        AppUser appUser = new AppUser(token, LocalDateTime.now());
         userRepository.save(appUser);
 
         Cookie cookie = new Cookie(cookieFilter.authCookieName, token);
