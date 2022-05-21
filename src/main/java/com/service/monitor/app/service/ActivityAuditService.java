@@ -4,7 +4,7 @@ import com.service.monitor.app.domain.*;
 import com.service.monitor.app.domain.dto.mvc.IpMvcDto;
 import com.service.monitor.app.domain.dto.mvc.SessionMvcDto;
 import com.service.monitor.app.domain.dto.mvc.UserMvcDto;
-import com.service.monitor.app.repository.UserRepository;
+//import com.service.monitor.app.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,8 +14,8 @@ import java.util.List;
 @Service
 public class ActivityAuditService {
 
-    @Autowired
-    private UserRepository userRepository;
+  //  @Autowired
+    //private UserRepository userRepository;
 
     public List<UserMvcDto> getAllUsers() {
         //Iterable<AppUser> appUsers = userRepository.findAll();

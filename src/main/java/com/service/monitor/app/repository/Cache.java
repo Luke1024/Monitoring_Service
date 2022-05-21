@@ -1,7 +1,6 @@
-package com.service.monitor.app.repository.cached.repository;
+package com.service.monitor.app.repository;
 
 import com.service.monitor.app.domain.AppUser;
-import com.service.monitor.app.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -11,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class Cache {
+class Cache {
 
     public List<AppUser> users = new ArrayList<>();
 

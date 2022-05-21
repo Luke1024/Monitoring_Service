@@ -1,8 +1,8 @@
-package com.service.monitor.app.service.user.identity.authorizer;
+package com.service.monitor.app.service;
 
 import com.service.monitor.app.domain.AppUser;
 import com.service.monitor.app.domain.Contact;
-import com.service.monitor.app.repository.cached.repository.CachedRepository;
+import com.service.monitor.app.repository.CachedRepository;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +16,7 @@ import java.util.Optional;
 import static org.hibernate.tool.schema.SchemaToolingLogging.LOGGER;
 
 @Service
-public class UserService {
+class UserService {
 
     @Autowired
     private CachedRepository cachedRepository;
@@ -57,7 +57,9 @@ public class UserService {
 
     private AppUser createUser(String token){
         if( ! tokenService.checkIfTokenWasGeneratedInAuthAndRemove(token)){
-            LOGGER.warn("Someone generated valid token from outside.");
+            if( ! token.equals(tokenService.tokenReplacementWhenCookiesSwitchOff)) {
+                LOGGER.warn("Someone generated valid token from outside.");
+            }
         }
         AppUser user = new AppUser(token, LocalDateTime.now());
         cachedRepository.saveUser(user);

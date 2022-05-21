@@ -1,4 +1,4 @@
-package com.service.monitor.app.service.user.identity.authorizer;
+package com.service.monitor.app.service;
 import com.service.monitor.app.domain.AppUser;
 import com.service.monitor.app.domain.UserSession;
 import org.slf4j.Logger;
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-public class SessionManager {
+class SessionManager {
 
     private Logger LOGGER = LoggerFactory.getLogger(SessionManager.class);
 

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface UserRepository extends CrudRepository<AppUser, Long> {
+interface UserRepository extends CrudRepository<AppUser, Long> {
 
     @Query("SELECT u FROM AppUser u WHERE u.token =:token")
     Optional<AppUser> findByToken(@Param("token") String token);

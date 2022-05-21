@@ -2,12 +2,11 @@ package com.service.monitor.app;
 
 import com.service.monitor.app.domain.AppUser;
 import com.service.monitor.app.repository.UserRepository;
-import com.service.monitor.app.repository.cached.repository.Cache;
-import com.service.monitor.app.repository.cached.repository.CachedRepository;
+import com.service.monitor.app.repository.Cache;
 import com.service.monitor.app.service.UserActivityService;
-import com.service.monitor.app.service.user.identity.authorizer.CookieFilter;
-import com.service.monitor.app.service.user.identity.authorizer.TokenService;
-import com.service.monitor.app.service.user.identity.authorizer.UserService;
+import com.service.monitor.app.service.CookieFilter;
+import com.service.monitor.app.service.TokenService;
+import com.service.monitor.app.service.UserService;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;

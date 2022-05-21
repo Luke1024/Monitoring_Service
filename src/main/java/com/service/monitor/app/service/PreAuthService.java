@@ -1,4 +1,4 @@
-package com.service.monitor.app.service.user.identity.authorizer;
+package com.service.monitor.app.service;
 
 import com.service.monitor.app.domain.AppUser;
 import org.slf4j.Logger;
@@ -13,7 +13,7 @@ import java.util.Optional;
 //service only returning cookie for later optional user creation
 
 @Service
-public class PreAuthService {
+class PreAuthService {
     private SecureRandom random = new SecureRandom();
 
     @Autowired

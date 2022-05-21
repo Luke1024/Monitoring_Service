@@ -1,8 +1,7 @@
-package com.service.monitor.app.repository.cached.repository;
+package com.service.monitor.app.repository;
 
 import com.service.monitor.app.domain.AppUser;
-import com.service.monitor.app.repository.UserRepository;
-import com.service.monitor.app.service.user.identity.authorizer.TokenService;
+import com.service.monitor.app.service.TokenService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +18,7 @@ public class CachedRepository {
     private UserRepository userRepository;
 
     @Autowired
-    private CacheUserFinderByToken userFinderByToken;
+    private CacheUserFinder cacheUserFinder;
 
     @Autowired
     private TokenService tokenService;
@@ -28,23 +27,22 @@ public class CachedRepository {
     private Cache cache;
 
     public void saveUser(AppUser appUser) {
-        if (isUserHasCookies(appUser)){
+        //avoiding duplicate users without token
+        if(isUserHasUniqueToken(appUser)) {
             cache.users.add(appUser);
             logger.info("Creating user in cache.");
         } else {
-            fetchUniqueCookieLessUser();
+            logger.warn("Token collision detected with token: " + appUser.getToken());
         }
     }
 
-    private boolean isUserHasCookies(AppUser appUser){
-        return ! appUser.getToken().equals(tokenService.tokenReplacementWhenCookiesSwitchOff);
-    }
-
-    private void fetchUniqueCookieLessUser(){
-        userFinderByToken.findUserByToken(tokenService.tokenReplacementWhenCookiesSwitchOff);
+    private boolean isUserHasUniqueToken(AppUser appUser){
+        String newUserToken = appUser.getToken();
+        Optional<AppUser> appUserOptional = cacheUserFinder.findUserByToken(newUserToken);
+        return ! appUserOptional.isPresent();
     }
 
     public Optional<AppUser> findUserByToken(String token){
-        return userFinderByToken.findUserByToken(token);
+        return cacheUserFinder.findUserByToken(token);
     }
 }

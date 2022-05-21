@@ -2,6 +2,9 @@ package com.service.monitor.app.service.user.identity.authorizer;
 
 import com.service.monitor.app.domain.AppUser;
 import com.service.monitor.app.repository.UserRepository;
+import com.service.monitor.app.service.PreAuthService;
+import com.service.monitor.app.service.TokenService;
+import com.service.monitor.app.service.UserService;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,7 +14,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest

@@ -1,14 +1,13 @@
-package com.service.monitor.app.repository.cached.repository;
+package com.service.monitor.app.repository;
 
 import com.service.monitor.app.domain.AppUser;
-import com.service.monitor.app.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
-public class CacheUserFinderByToken {
+class CacheUserFinder {
 
     @Autowired
     private UserRepository userRepository;
