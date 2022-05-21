@@ -3,7 +3,7 @@ package com.service.monitor.app.controller;
 import com.service.monitor.app.domain.dto.ContactDto;
 import com.service.monitor.app.domain.dto.StringDto;
 import com.service.monitor.app.service.UserActivityService;
-import com.service.monitor.app.service.user.identity.authorizer.PreAuthService;
+import com.service.monitor.app.service.PreAuthService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,8 +35,7 @@ public class DeveloperPageInputController {
     @PostMapping(value="/load")
     public boolean loadUserData(@RequestBody StringDto message, HttpServletRequest request, HttpServletResponse response){
         Cookie[] cookies = request.getCookies();
-        String ipAdress = request.getRemoteAddr();
-        return userActivityService.save(message.getMessage(), cookies, ipAdress);
+        return userActivityService.save(message.getMessage(), cookies);
     }
 
     @PostMapping(value="/contact")

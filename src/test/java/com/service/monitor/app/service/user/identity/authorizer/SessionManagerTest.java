@@ -2,6 +2,9 @@ package com.service.monitor.app.service.user.identity.authorizer;
 
 import com.service.monitor.app.domain.AppUser;
 import com.service.monitor.app.repository.UserRepository;
+import com.service.monitor.app.service.PreAuthService;
+import com.service.monitor.app.service.SessionManager;
+import com.service.monitor.app.service.TokenService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +35,7 @@ public class SessionManagerTest {
     @Test
     public void testingAddingSessionWhenCookiesSwitchOn(){
         String token = tokenService.generate();
-        AppUser appUser = new AppUser("","", LocalDateTime.now());
+        AppUser appUser = new AppUser("", LocalDateTime.now());
         sessionManager.addSessionIfNecessary(appUser, Optional.of(token));
 
         assertEquals(token, appUser.getLastSession().get().getSessionToken());
@@ -41,7 +44,7 @@ public class SessionManagerTest {
     @Test
     public void testAlreadyExistingSession(){
         String token = tokenService.generate();
-        AppUser appUser = new AppUser("", "", LocalDateTime.now());
+        AppUser appUser = new AppUser("", LocalDateTime.now());
         appUser.addSession(token);
         sessionManager.addSessionIfNecessary(appUser, Optional.of(token));
 
@@ -51,7 +54,7 @@ public class SessionManagerTest {
     @Test
     public void testCreateSessionWithSessionAlreadyExisting(){
         String token = tokenService.generate();
-        AppUser appUser = new AppUser("", "", LocalDateTime.now());
+        AppUser appUser = new AppUser("", LocalDateTime.now());
         appUser.addSession("");
         sessionManager.addSessionIfNecessary(appUser, Optional.of(token));
 

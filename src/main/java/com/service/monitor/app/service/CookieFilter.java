@@ -1,6 +1,5 @@
-package com.service.monitor.app.service.user.identity.authorizer;
+package com.service.monitor.app.service;
 
-import com.service.monitor.app.service.user.identity.authorizer.user.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class CookieFilter {
+class CookieFilter {
 
     public String authCookieName = "AUTH";
     public String sessionCookieName = "SESSION";

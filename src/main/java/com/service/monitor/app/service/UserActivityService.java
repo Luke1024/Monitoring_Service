@@ -1,13 +1,8 @@
 package com.service.monitor.app.service;
 
 import com.service.monitor.app.domain.Contact;
-import com.service.monitor.app.domain.UserSession;
 import com.service.monitor.app.domain.dto.ContactDto;
 import com.service.monitor.app.domain.AppUser;
-import com.service.monitor.app.service.user.identity.authorizer.CookieFilter;
-import com.service.monitor.app.service.user.identity.authorizer.PreAuthService;
-import com.service.monitor.app.service.user.identity.authorizer.SessionManager;
-import com.service.monitor.app.service.user.identity.authorizer.user.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,8 +36,8 @@ public class UserActivityService {
         identityAuthorizer.preAuth(cookies, response);
     }
 
-    public boolean save(String action, Cookie[] cookies, String ipAdress) {
-        AppUser appUser = userService.auth(cookies, ipAdress);
+    public boolean save(String action, Cookie[] cookies) {
+        AppUser appUser = userService.auth(cookies);
         Optional<String> sessionToken = cookieFilter.filterCookiesToValue(cookies, cookieFilter.sessionCookieName);
         sessionManager.addSessionIfNecessary(appUser, sessionToken);
         addActionToLastSession(appUser,action);
@@ -51,11 +46,10 @@ public class UserActivityService {
 
     private void addActionToLastSession(AppUser appUser,String action){
         appUser.getLastSession().get().addAction(action);
-        userService.save(appUser);
     }
 
     public boolean saveContact(ContactDto contactDto, Cookie[] cookies, String ipAdress) {
-        AppUser appUser = userService.auth(cookies, ipAdress);
+        AppUser appUser = userService.auth(cookies);
         Contact contact = new Contact(contactDto.getName(),
                         contactDto.getEmail(),
                         contactDto.getMessage(),

@@ -1,4 +1,4 @@
-package com.service.monitor.app.service.user.identity.authorizer;
+package com.service.monitor.app.service;
 
 
 import org.springframework.stereotype.Service;
@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class TokenService {
+class TokenService {
 
     private SecureRandom random = new SecureRandom();
     int tokenLenght = 16;
