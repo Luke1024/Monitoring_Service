@@ -1,7 +1,6 @@
 package com.service.monitor.app.repository;
 
 import com.service.monitor.app.domain.AppUser;
-import com.service.monitor.app.service.TokenService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +18,6 @@ public class CachedRepository {
 
     @Autowired
     private CacheUserFinder cacheUserFinder;
-
-    @Autowired
-    private TokenService tokenService;
 
     @Autowired
     private Cache cache;
