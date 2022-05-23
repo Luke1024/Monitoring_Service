@@ -1,12 +1,8 @@
-package com.service.monitor.app;
+package com.service.monitor.app.service;
 
 import com.service.monitor.app.domain.AppUser;
-import com.service.monitor.app.repository.UserRepository;
 import com.service.monitor.app.repository.Cache;
-import com.service.monitor.app.service.UserActivityService;
-import com.service.monitor.app.service.CookieFilter;
-import com.service.monitor.app.service.TokenService;
-import com.service.monitor.app.service.UserService;
+import com.service.monitor.app.repository.UserRepository;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;

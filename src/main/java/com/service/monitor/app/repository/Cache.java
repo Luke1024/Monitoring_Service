@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-class Cache {
+public class Cache {
 
     public List<AppUser> users = new ArrayList<>();
 
