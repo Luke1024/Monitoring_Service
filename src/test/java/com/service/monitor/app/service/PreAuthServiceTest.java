@@ -2,13 +2,8 @@ package com.service.monitor.app.service;
 
 import com.service.monitor.app.domain.AppUser;
 import com.service.monitor.app.repository.UserRepository;
-import com.service.monitor.app.service.CookieFilter;
-import com.service.monitor.app.service.PreAuthService;
-import com.service.monitor.app.service.TokenService;
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,9 +39,7 @@ public class PreAuthServiceTest {
     public void preAuthWithoutCookies() {
         Cookie[] cookies = {};
         identityAuthorizer.preAuth(cookies, response);
-        ArgumentCaptor<String> stringCaptor = ArgumentCaptor.forClass(String.class);
-        Mockito.verify(response).addHeader(any(),stringCaptor.capture());
-        Assert.assertTrue(stringCaptor.getValue().length()>0);
+        Mockito.verify(response, Mockito.times(2)).addHeader(any(),any());
     }
 
     @Test
@@ -59,6 +52,6 @@ public class PreAuthServiceTest {
         Cookie[] cookies = {cookie};
         identityAuthorizer.preAuth(cookies, response);
 
-        Mockito.verifyNoInteractions(response);
+        Mockito.verify(response, Mockito.times(1)).addHeader(any(), any());
     }
 }

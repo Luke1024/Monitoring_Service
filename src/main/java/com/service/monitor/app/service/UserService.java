@@ -29,8 +29,8 @@ class UserService {
 
     private Logger logger = LoggerFactory.getLogger(UserService.class);
 
-    public void saveContact(AppUser appUser, Contact contact){
-        appUser.addContact(contact);
+    public void saveContact(Contact contact){
+        contact.getAppUser().addContact(contact);
     }
 
     public Optional<AppUser> findUserByToken(String token){

@@ -55,7 +55,7 @@ public class UserActivityService {
                         contactDto.getMessage(),
                         appUser);
 
-        userService.saveContact(appUser, contact);
+        userService.saveContact(contact);
         LOGGER.info("Contact added: " + contactDto.toString() + ", by user with id:" +
                 appUser.getId() + ", token: " + appUser.getToken());
         return true;

@@ -2,9 +2,6 @@ package com.service.monitor.app.service;
 
 import com.service.monitor.app.domain.AppUser;
 import com.service.monitor.app.repository.UserRepository;
-import com.service.monitor.app.service.PreAuthService;
-import com.service.monitor.app.service.SessionManager;
-import com.service.monitor.app.service.TokenService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

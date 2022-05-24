@@ -44,4 +44,15 @@ public class Contact {
     public AppUser getAppUser() {
         return appUser;
     }
+
+    @Override
+    public String toString() {
+        return "Contact{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", message='" + message + '\'' +
+                ", appUser=" + appUser +
+                '}';
+    }
 }
