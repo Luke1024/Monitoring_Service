@@ -62,7 +62,7 @@ public class PerformanceTesting {
         Cookie[] cookies = {authCookie, sessionCookie};
 
         for(int i=0; i<actionSavingIterations; i++){
-            activityService.save(action, cookies);
+            activityService.saveAction(action, cookies);
         }
 
         cache.saveActiveUsersToDatabase();

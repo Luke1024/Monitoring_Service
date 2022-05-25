@@ -37,4 +37,9 @@ public class Action {
     public UserSession getUserSession() {
         return userSession;
     }
+
+    @Override
+    public String toString() {
+        return action;
+    }
 }

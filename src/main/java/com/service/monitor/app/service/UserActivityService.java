@@ -36,7 +36,7 @@ public class UserActivityService {
         identityAuthorizer.preAuth(cookies, response);
     }
 
-    public boolean save(String action, Cookie[] cookies) {
+    public boolean saveAction(String action, Cookie[] cookies) {
         AppUser appUser = userService.auth(cookies);
         Optional<String> sessionToken = cookieFilter.filterCookiesToValue(cookies, cookieFilter.sessionCookieName);
         sessionManager.addSessionIfNecessary(appUser, sessionToken);

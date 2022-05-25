@@ -31,7 +31,7 @@ public class DeveloperPageInputController {
     @PostMapping(value="/load")
     public boolean loadUserData(@RequestBody StringDto message, HttpServletRequest request, HttpServletResponse response){
         Cookie[] cookies = request.getCookies();
-        return userActivityService.save(message.getMessage(), cookies);
+        return userActivityService.saveAction(message.getMessage(), cookies);
     }
 
     @PostMapping(value="/contact")
