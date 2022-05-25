@@ -32,13 +32,13 @@ public class CachedRepository {
         }
     }
 
+    public Optional<AppUser> findUserByToken(String token){
+        return cacheUserFinder.findUserByToken(token);
+    }
+
     private boolean isUserHasUniqueToken(AppUser appUser){
         String newUserToken = appUser.getToken();
         Optional<AppUser> appUserOptional = cacheUserFinder.findUserByToken(newUserToken);
         return ! appUserOptional.isPresent();
-    }
-
-    public Optional<AppUser> findUserByToken(String token){
-        return cacheUserFinder.findUserByToken(token);
     }
 }

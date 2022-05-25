@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-class TokenService {
+public class TokenService {
 
     private SecureRandom random = new SecureRandom();
     int tokenLenght = 16;

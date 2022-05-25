@@ -17,6 +17,10 @@ public class Cache {
     private LocalDateTime now;
     private int minimumTimeOfInactivityInMinutes = 5;
 
+    public int getMinimumTimeOfInactivityInMinutes() {
+        return minimumTimeOfInactivityInMinutes;
+    }
+
     @Autowired
     private UserRepository userRepository;
 
