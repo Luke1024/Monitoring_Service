@@ -42,7 +42,7 @@ public class PerformanceTesting {
 
     @Ignore
     @Test
-    public void actionSaving(){
+    public void actionSavingPerformance(){
 
         long start = System.currentTimeMillis();
 
