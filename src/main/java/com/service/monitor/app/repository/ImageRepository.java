@@ -1,4 +1,9 @@
 package com.service.monitor.app.repository;
 
-public class ImageRepository {
+import com.service.monitor.app.domain.Image;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface ImageRepository extends CrudRepository<Image, Long> {
 }

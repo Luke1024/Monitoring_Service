@@ -12,7 +12,6 @@ public class AppUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @OrderColumn
     private long id;
     private String token;
     @OneToMany(targetEntity = UserSession.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
