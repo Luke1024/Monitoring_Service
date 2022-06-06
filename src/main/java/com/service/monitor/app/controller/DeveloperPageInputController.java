@@ -29,7 +29,7 @@ public class DeveloperPageInputController {
     }
 
     @PostMapping(value="/load")
-    public boolean loadUserData(@RequestBody StringDto message, HttpServletRequest request, HttpServletResponse response){
+    public boolean loadUserData(@RequestBody StringDto message, HttpServletRequest request){
         Cookie[] cookies = request.getCookies();
         return userActivityService.saveAction(message.getMessage(), cookies);
     }
@@ -37,7 +37,6 @@ public class DeveloperPageInputController {
     @PostMapping(value="/contact")
     public boolean saveUserContact(@RequestBody ContactDto contactDto, HttpServletRequest request){
         Cookie[] cookies = request.getCookies();
-        String ipAdress = request.getRemoteAddr();
-        return userActivityService.saveContact(contactDto, cookies, ipAdress);
+        return userActivityService.saveContact(contactDto, cookies);
     }
 }

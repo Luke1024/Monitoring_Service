@@ -48,7 +48,7 @@ public class UserActivityService {
         appUser.getLastSession().get().addAction(action);
     }
 
-    public boolean saveContact(ContactDto contactDto, Cookie[] cookies, String ipAdress) {
+    public boolean saveContact(ContactDto contactDto, Cookie[] cookies) {
         AppUser appUser = userService.auth(cookies);
         Contact contact = new Contact(contactDto.getName(),
                         contactDto.getEmail(),
