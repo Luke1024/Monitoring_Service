@@ -45,7 +45,7 @@ public class ProjectsController {
     @GetMapping(value = "/description/{id}")
     public ResponseEntity<String> getProjectDescription(@PathVariable long id, HttpServletRequest request){
         Cookie[] cookies = request.getCookies();
-        userActivityService.saveAction("requesting_project_description" + id, cookies);
+        userActivityService.saveAction("requesting_project_description_" + id, cookies);
         return projectService.getDescription(id);
     }
 
