@@ -1,7 +1,8 @@
 package com.service.monitor.app.service;
 
-import com.service.monitor.app.domain.AuthKey;
+import com.service.monitor.app.domain.AccessTime;
 import com.service.monitor.app.domain.ProtectedResource;
+import com.service.monitor.app.domain.ProtectedResourceAccessAuthKey;
 import com.service.monitor.app.repository.ProtectedResourceRepository;
 import com.service.monitor.app.domain.enums.ResourceType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,9 +10,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Base64;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -28,21 +29,23 @@ public class ResourceService { ;
     }
 
     public byte[] getImage(String key, long imageId){
-        Optional<ProtectedResource> imageOptional = findResourceInCache(imageId, key, ResourceType.IMAGE);
-        if(imageOptional.isPresent()) {
-            return Base64.getDecoder().decode(imageOptional.get().getStringResource());
-        } else {
-            return null;
+        Optional<ProtectedResource> imageOptional = findResourceInCache(imageId, ResourceType.IMAGE);
+        if(imageOptional.isPresent()){
+            if(isResourceAuthorizedLogUsage(imageOptional.get(), key)){
+                return Base64.getDecoder().decode(imageOptional.get().getStringResource());
+            }
         }
+        return null;
     }
 
     public ResponseEntity<String> getStringResource(String key, long stringId){
-        Optional<ProtectedResource> stringResource = findResourceInCache(stringId, key, ResourceType.STRING);
+        Optional<ProtectedResource> stringResource = findResourceInCache(stringId, ResourceType.STRING);
         if(stringResource.isPresent()) {
-            return ResponseEntity.ok(stringResource.get().getStringResource());
-        } else {
-            return ResponseEntity.notFound().build();
+            if (isResourceAuthorizedLogUsage(stringResource.get(), key)) {
+                return ResponseEntity.ok(stringResource.get().getStringResource());
+            }
         }
+        return ResponseEntity.notFound().build();
     }
 
     public void cacheReload(){
@@ -50,25 +53,25 @@ public class ResourceService { ;
         protectedResourcesCache = protectedResourceRepository.findAll();
     }
 
-    public Optional<ProtectedResource> findResourceInCache(long resourceId, String keyInput, ResourceType resourceType){
+    private Optional<ProtectedResource> findResourceInCache(long resourceId, ResourceType resourceType){
         for(ProtectedResource resource : protectedResourcesCache){
-            /*long id = resource.getId();
-            List<AuthKey> authKeyList = resource.getAuthKeys();
+            long id = resource.getId();
             ResourceType type = resource.getResourceType();
-            if(id==resourceId && isKeyExist(authKeyList, keyInput) && type.equals(resourceType)){
-                resource.resourceWasUsed();
+            if(id==resourceId && type.equals(resourceType)){
                 return Optional.of(resource);
-            }*/
+            }
         }
         return Optional.empty();
     }
 
-    private boolean isKeyExist(List<AuthKey> authKeyList, String keyInput){
-        for(AuthKey authKey : authKeyList){
-            if(authKey.getKeyValue().equals(keyInput)){
-                //authKey.keyWasUsed();
-                return true;
-            }
+    private boolean isResourceAuthorizedLogUsage(ProtectedResource resource, String key){
+        for(ProtectedResourceAccessAuthKey authKeyRegister : resource.getKeyRegisters()){
+           if(authKeyRegister.getAuthKey() != null){
+               if(authKeyRegister.getAuthKey().equals(key)){
+                   authKeyRegister.getAccessTimeList().add(new AccessTime(LocalDateTime.now(), authKeyRegister));
+                   return true;
+               }
+           }
         }
         return false;
     }

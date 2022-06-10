@@ -13,7 +13,7 @@ public class ProtectedResource {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     @OneToMany(mappedBy = "resource",targetEntity = ProtectedResourceAccessAuthKey.class, cascade = CascadeType.ALL)
-    private List<ProtectedResourceAccessAuthKey> resources = new ArrayList<>();
+    private List<ProtectedResourceAccessAuthKey> keyRegisters = new ArrayList<>();
     @Enumerated(EnumType.STRING)
     private ResourceType resourceType;
     @Column(columnDefinition = "LONGTEXT")
@@ -31,8 +31,8 @@ public class ProtectedResource {
         return id;
     }
 
-    public List<ProtectedResourceAccessAuthKey> getResources() {
-        return resources;
+    public List<ProtectedResourceAccessAuthKey> getKeyRegisters() {
+        return keyRegisters;
     }
 
     public ResourceType getResourceType() {
@@ -44,6 +44,6 @@ public class ProtectedResource {
     }
 
     public void addProtectedResourceAuthKey(ProtectedResourceAccessAuthKey protectedResourceAccessAuthKey){
-        resources.add(protectedResourceAccessAuthKey);
+        keyRegisters.add(protectedResourceAccessAuthKey);
     }
 }

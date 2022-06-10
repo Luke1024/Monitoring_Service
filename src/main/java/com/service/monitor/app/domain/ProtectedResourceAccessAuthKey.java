@@ -4,7 +4,6 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-
 @Entity
 public class ProtectedResourceAccessAuthKey {
 
@@ -17,10 +16,20 @@ public class ProtectedResourceAccessAuthKey {
     @ManyToOne
     @JoinColumn(name = "authkey_id")
     private AuthKey authKey;
+    @OneToMany(mappedBy = "resourceKeyRegister",targetEntity = AccessTime.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OrderColumn
+    private List<AccessTime> accessTimeList = new ArrayList<>();
+
+    public ProtectedResourceAccessAuthKey() {
+    }
 
     public ProtectedResourceAccessAuthKey(ProtectedResource resource, AuthKey authKey) {
         this.resource = resource;
         this.authKey = authKey;
+    }
+
+    public long getId() {
+        return id;
     }
 
     public ProtectedResource getResource() {
@@ -29,5 +38,9 @@ public class ProtectedResourceAccessAuthKey {
 
     public AuthKey getAuthKey() {
         return authKey;
+    }
+
+    public List<AccessTime> getAccessTimeList() {
+        return accessTimeList;
     }
 }
