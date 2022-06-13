@@ -1,6 +1,7 @@
 package com.service.monitor.app.domain;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -10,8 +11,8 @@ public class AuthKey {
     private long id;
     private String keyValue;
     private String sendTo;
-    @OneToMany(mappedBy = "authKey", targetEntity = ProtectedResourceAccessAuthKey.class, fetch = FetchType.EAGER)
-    private List<ProtectedResourceAccessAuthKey> resourceKey;
+    @OneToMany(mappedBy = "authKey", targetEntity = ProtectedResourceAccessAuthKey.class, cascade = CascadeType.ALL)
+    private List<ProtectedResourceAccessAuthKey> resourceKey = new ArrayList<>();
 
     public AuthKey() {
     }

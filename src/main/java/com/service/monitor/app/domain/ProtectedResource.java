@@ -12,7 +12,7 @@ public class ProtectedResource {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    @OneToMany(mappedBy = "resource",targetEntity = ProtectedResourceAccessAuthKey.class, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "resource",targetEntity = ProtectedResourceAccessAuthKey.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<ProtectedResourceAccessAuthKey> keyRegisters = new ArrayList<>();
     @Enumerated(EnumType.STRING)
     private ResourceType resourceType;
@@ -22,9 +22,17 @@ public class ProtectedResource {
     public ProtectedResource() {
     }
 
-    public ProtectedResource(String stringResource, ResourceType resourceType) {
+    public ProtectedResource(String stringResource, ResourceType resourceType, AuthKey authKey) {
         this.stringResource = stringResource;
         this.resourceType = resourceType;
+        relationAssembler(authKey);
+    }
+
+    private void relationAssembler(AuthKey authKey){
+        ProtectedResourceAccessAuthKey relationshipConnector =
+                new ProtectedResourceAccessAuthKey(this, authKey);
+        authKey.addProtectedResourceAccessAuthKey(relationshipConnector);
+        keyRegisters.add(relationshipConnector);
     }
 
     public long getId() {

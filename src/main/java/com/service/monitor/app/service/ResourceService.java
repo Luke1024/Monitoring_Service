@@ -1,6 +1,5 @@
 package com.service.monitor.app.service;
 
-import com.service.monitor.app.domain.AccessTime;
 import com.service.monitor.app.domain.ProtectedResource;
 import com.service.monitor.app.domain.ProtectedResourceAccessAuthKey;
 import com.service.monitor.app.repository.ProtectedResourceRepository;
@@ -10,13 +9,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Optional;
 
 @Service
-public class ResourceService { ;
+public class ResourceService {
 
     @Autowired
     private ProtectedResourceRepository protectedResourceRepository;
@@ -53,11 +51,11 @@ public class ResourceService { ;
         protectedResourcesCache = protectedResourceRepository.findAll();
     }
 
-    private Optional<ProtectedResource> findResourceInCache(long resourceId, ResourceType resourceType){
+    protected Optional<ProtectedResource> findResourceInCache(long resourceId, ResourceType resourceType){
         for(ProtectedResource resource : protectedResourcesCache){
             long id = resource.getId();
-            ResourceType type = resource.getResourceType();
-            if(id==resourceId && type.equals(resourceType)){
+            String type = resource.getResourceType().getDisplayName();
+            if(id==resourceId && type.equals(resourceType.getDisplayName())){
                 return Optional.of(resource);
             }
         }
@@ -67,8 +65,8 @@ public class ResourceService { ;
     private boolean isResourceAuthorizedLogUsage(ProtectedResource resource, String key){
         for(ProtectedResourceAccessAuthKey authKeyRegister : resource.getKeyRegisters()){
            if(authKeyRegister.getAuthKey() != null){
-               if(authKeyRegister.getAuthKey().equals(key)){
-                   authKeyRegister.getAccessTimeList().add(new AccessTime(LocalDateTime.now(), authKeyRegister));
+               if(authKeyRegister.getAuthKey().getKeyValue().equals(key)){
+                   authKeyRegister.addAccessTime();
                    return true;
                }
            }

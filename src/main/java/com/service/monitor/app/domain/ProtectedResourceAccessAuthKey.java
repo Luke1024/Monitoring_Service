@@ -1,6 +1,7 @@
 package com.service.monitor.app.domain;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,6 +39,10 @@ public class ProtectedResourceAccessAuthKey {
 
     public AuthKey getAuthKey() {
         return authKey;
+    }
+
+    public void addAccessTime(){
+        accessTimeList.add(new AccessTime(LocalDateTime.now(),this));
     }
 
     public List<AccessTime> getAccessTimeList() {
