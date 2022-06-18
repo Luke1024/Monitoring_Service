@@ -1,5 +1,7 @@
-package com.service.monitor.app.controller;
+package com.service.monitor.app.controller.admin;
 
+import com.service.monitor.app.controller.ProjectsController;
+import com.service.monitor.app.service.AdminAuthService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,14 +11,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController()
-public class AdminController {
+public class CacheController {
 
     private Logger logger = LoggerFactory.getLogger(ProjectsController.class);
 
     @Autowired
     private CacheManager cacheManager;
 
-    private String authKey = "example_token";
+    @Autowired
+    private AdminAuthService adminAuthService;
 
     @GetMapping("/cache/clear/{authToken}")
     public void clearCache(@PathVariable String authToken){
@@ -28,6 +31,6 @@ public class AdminController {
     }
 
     private boolean isKeyValid(String inputKey){
-        return inputKey.equals(authKey);
+        return adminAuthService.authorize(inputKey);
     }
 }
