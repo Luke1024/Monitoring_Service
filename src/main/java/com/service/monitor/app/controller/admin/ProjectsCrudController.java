@@ -50,13 +50,24 @@ public class ProjectsCrudController {
     }
 
     @DeleteMapping(value = "projects/{projectId}/{adminKey}")
-    public boolean saveProject(@PathVariable long projectId, @PathVariable String adminKey){
+    public boolean deleteProject(@PathVariable long projectId, @PathVariable String adminKey){
         if(authorize(adminKey)) {
             return projectService.deleteProject(projectId);
         } else return false;
     }
 
+    @DeleteMapping(value = "projects/purge_data/{adminKey}/{deleteAdminKey}")
+    public boolean purgeProjectData(@PathVariable String adminKey, @PathVariable String deleteAdminKey){
+        if(authorize(adminKey) && authorize(deleteAdminKey)){
+            return projectService.deleteAllProjects();
+        } else return false;
+    }
+
     private boolean authorize(String adminKey){
         return adminAuthService.authorize(adminKey);
+    }
+
+    private boolean authorizeDelete(String adminDeleteKey){
+        return adminAuthService.authorizeDelete(adminDeleteKey);
     }
 }

@@ -21,8 +21,8 @@ public class ProjectRepositoryTest {
 
     @Test
     public void getProjectByType(){
-        Project projectTypeNormal = new Project(ProjectType.NORMAL,"","","","","",new ArrayList<>());
-        Project projectTypeMini = new Project(ProjectType.MINI, "", "", "", "", "", new ArrayList<>());
+        Project projectTypeNormal = new Project(ProjectType.NORMAL,"","","","","", 0);
+        Project projectTypeMini = new Project(ProjectType.MINI, "", "", "", "", "", 0);
 
         projectRepository.save(projectTypeNormal);
         projectRepository.save(projectTypeMini);

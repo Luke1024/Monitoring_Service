@@ -14,7 +14,7 @@ public class Image {
 
     private String name;
 
-    @Column(columnDefinition = "MEDIUMTEXT")
+    @Column(columnDefinition = "LONGTEXT")
     private String base64image;
 
     public Image() {

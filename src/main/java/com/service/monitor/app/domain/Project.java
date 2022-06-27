@@ -15,6 +15,7 @@ public class Project {
     private String technologies;
     private String miniatureUrl;
     private String description;
+    @Column(columnDefinition = "LONGTEXT")
     private String descriptionPage;
     private int displayOrder;
 

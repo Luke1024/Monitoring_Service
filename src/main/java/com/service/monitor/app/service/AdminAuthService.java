@@ -6,8 +6,13 @@ import org.springframework.stereotype.Service;
 public class AdminAuthService {
 
     private String authKey = "example_token";
+    private String deleteAuthKey = "example_token_2";
 
     public boolean authorize(String adminKey){
         return adminKey.equals(authKey);
+    }
+
+    public boolean authorizeDelete(String adminDeleteKey){
+        return deleteAuthKey.equals(adminDeleteKey);
     }
 }

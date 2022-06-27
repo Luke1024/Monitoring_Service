@@ -2,6 +2,7 @@ package com.service.monitor.app.service;
 
 import com.service.monitor.app.domain.Project;
 import com.service.monitor.app.domain.dto.ProjectMiniatureDto;
+import com.service.monitor.app.domain.dto.StringDto;
 import com.service.monitor.app.domain.dto.crud.ProjectDto;
 import com.service.monitor.app.domain.enums.ProjectType;
 import com.service.monitor.app.repository.ProjectRepository;
@@ -30,10 +31,10 @@ public class ProjectService {
                 projectRepository.findByType(ProjectType.MINI));
     }
 
-    public ResponseEntity<String> getDescription(long id){
+    public ResponseEntity<StringDto> getDescription(long id){
         Optional<Project> optionalProject = projectRepository.findById(id);
         if(optionalProject.isPresent()) {
-            return ResponseEntity.ok(optionalProject.get().getDescriptionPage());
+            return ResponseEntity.ok(new StringDto(optionalProject.get().getDescriptionPage()));
         } else {
             return ResponseEntity.notFound().build();
         }
@@ -99,6 +100,11 @@ public class ProjectService {
 
     public boolean deleteProject(long projectId){
         projectRepository.deleteById(projectId);
+        return true;
+    }
+
+    public boolean deleteAllProjects(){
+        projectRepository.deleteAll();
         return true;
     }
 

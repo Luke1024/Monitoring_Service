@@ -1,6 +1,7 @@
 package com.service.monitor.app.controller;
 
 import com.service.monitor.app.domain.dto.ProjectMiniatureDto;
+import com.service.monitor.app.domain.dto.StringDto;
 import com.service.monitor.app.service.ImageService;
 import com.service.monitor.app.service.ProjectService;
 import com.service.monitor.app.service.UserActivityService;
@@ -18,13 +19,10 @@ import java.util.List;
 @CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
 @RestController
 @RequestMapping("/projects")
-public class ProjectsController {
+public class ProjectController {
 
     @Autowired
     private ProjectService projectService;
-
-    @Autowired
-    private ImageService imageService;
 
     @Autowired
     private UserActivityService userActivityService;
@@ -43,15 +41,9 @@ public class ProjectsController {
 
     @Cacheable("descriptions")
     @GetMapping(value = "/description/{id}")
-    public ResponseEntity<String> getProjectDescription(@PathVariable long id, HttpServletRequest request){
+    public ResponseEntity<StringDto> getProjectDescription(@PathVariable long id, HttpServletRequest request){
         Cookie[] cookies = request.getCookies();
         userActivityService.saveAction("requesting_project_description_" + id, cookies);
         return projectService.getDescription(id);
-    }
-
-    @Cacheable("images")
-    @GetMapping(value = "/image/{imageId}", produces = MediaType.IMAGE_JPEG_VALUE)
-    public @ResponseBody byte[] getProjectImage(@PathVariable long imageId){
-        return imageService.getProjectImage(imageId);
     }
 }
