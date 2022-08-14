@@ -3,6 +3,8 @@ package com.service.monitor.app.service;
 import com.service.monitor.app.domain.Image;
 import com.service.monitor.app.domain.dto.crud.ImageDto;
 import com.service.monitor.app.repository.ImageRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -11,12 +13,15 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ImageService {
 
     @Autowired
     private ImageRepository imageRepository;
+
+    private Logger logger = LoggerFactory.getLogger(ImageService.class);
 
     public byte[] getProjectImage(long imageId){
         Optional<Image> image = imageRepository.findById(imageId);
@@ -54,12 +59,24 @@ public class ImageService {
                 image.getBase64image().length());
     }
 
+    public boolean saveAllImages(List<ImageDto> imageDtoList){
+        List<Image> imagesToSave =
+                imageDtoList.stream().map(dto -> mapToImage(dto)).collect(Collectors.toList());
+        imageRepository.saveAll(imagesToSave);
+        return true;
+    }
+
     public boolean saveImage(ImageDto imageDto){
-        imageRepository.save(new Image(
+        imageRepository.save(mapToImage(imageDto));
+        return true;
+    }
+
+    private Image mapToImage(ImageDto imageDto){
+        return new Image(
+                imageDto.getId(),
                 imageDto.getName(),
                 imageDto.getBase64image()
-        ));
-        return true;
+        );
     }
 
     public boolean updateImage(ImageDto imageDto){
@@ -76,6 +93,7 @@ public class ImageService {
     }
 
     public boolean deleteAllImages(){
+        logger.info("Deleting all images");
         imageRepository.deleteAll();
         return true;
     }

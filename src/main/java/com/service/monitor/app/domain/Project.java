@@ -7,7 +7,6 @@ import javax.persistence.*;
 @Entity
 public class Project {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     @Enumerated(EnumType.STRING)
     private ProjectType type;
@@ -20,16 +19,6 @@ public class Project {
     private int displayOrder;
 
     public Project() {
-    }
-
-    public Project(ProjectType type, String title, String technologies, String miniatureUrl, String description, String descriptionPage, int displayOrder) {
-        this.type = type;
-        this.title = title;
-        this.technologies = technologies;
-        this.miniatureUrl = miniatureUrl;
-        this.description = description;
-        this.descriptionPage = descriptionPage;
-        this.displayOrder = displayOrder;
     }
 
     public Project(long id, ProjectType type, String title, String technologies, String miniatureUrl, String description, String descriptionPage, int displayOrder) {

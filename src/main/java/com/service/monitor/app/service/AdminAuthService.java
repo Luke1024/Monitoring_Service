@@ -13,6 +13,6 @@ public class AdminAuthService {
     }
 
     public boolean authorizeDelete(String adminDeleteKey){
-        return deleteAuthKey.equals(adminDeleteKey);
+        return adminDeleteKey.equals(deleteAuthKey);
     }
 }

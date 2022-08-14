@@ -9,7 +9,6 @@ import javax.persistence.*;
 public class Image {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
     private String name;
@@ -20,7 +19,8 @@ public class Image {
     public Image() {
     }
 
-    public Image(String name, String base64image) {
+    public Image(long id, String name, String base64image) {
+        this.id = id;
         this.name = name;
         this.base64image = base64image;
     }

@@ -28,7 +28,7 @@ public class ImageCrudController {
         } else return new ArrayList<>();
     }
 
-    @GetMapping(value = "images/{id}/{adminKey}")
+    @GetMapping(value = "image/{id}/{adminKey}")
     public ResponseEntity<ImageDto> getImage(@PathVariable long id, @PathVariable String adminKey){
         if(authorize(adminKey)){
             return imageService.getImageData(id);
@@ -36,20 +36,27 @@ public class ImageCrudController {
     }
 
     @PostMapping(value = "images/{adminKey}")
+    public boolean saveMultipleImages(@RequestBody List<ImageDto> imageDtoList, @PathVariable String adminKey){
+        if(authorize(adminKey)){
+            return imageService.saveAllImages(imageDtoList);
+        } else return false;
+    }
+
+    @PostMapping(value = "image/{adminKey}")
     public boolean saveImage(@RequestBody ImageDto imageDto, @PathVariable String adminKey){
         if(authorize(adminKey)){
             return imageService.saveImage(imageDto);
         } else return false;
     }
 
-    @PutMapping(value = "images/{adminKey}")
+    @PutMapping(value = "image/{adminKey}")
     public boolean updateImage(@RequestBody ImageDto imageDto, @PathVariable String adminKey){
         if(authorize(adminKey)){
             return imageService.updateImage(imageDto);
         } else return false;
     }
 
-    @DeleteMapping(value = "images/{imageId}/{adminKey}")
+    @DeleteMapping(value = "image/{imageId}/{adminKey}")
     public boolean deleteProject(@PathVariable long id, @PathVariable String adminKey){
         if(authorize(adminKey)){
             return imageService.deleteImage(id);
@@ -58,8 +65,9 @@ public class ImageCrudController {
 
     @DeleteMapping(value = "images/{adminKey}/{deleteAdminKey}")
     public boolean purgeImageData(@PathVariable String adminKey, @PathVariable String deleteAdminKey){
-        if(authorize(adminKey) && authorize(deleteAdminKey)){
-            return imageService.deleteAllImages();
+        if(authorize(adminKey) && authorizeDelete(deleteAdminKey)){
+            imageService.deleteAllImages();
+            return true;
         } else return false;
     }
 

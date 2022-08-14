@@ -2,12 +2,10 @@ package com.service.monitor.app.controller;
 
 import com.service.monitor.app.domain.dto.ProjectMiniatureDto;
 import com.service.monitor.app.domain.dto.StringDto;
-import com.service.monitor.app.service.ImageService;
 import com.service.monitor.app.service.ProjectService;
 import com.service.monitor.app.service.UserActivityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

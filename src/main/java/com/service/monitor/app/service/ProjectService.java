@@ -6,11 +6,14 @@ import com.service.monitor.app.domain.dto.StringDto;
 import com.service.monitor.app.domain.dto.crud.ProjectDto;
 import com.service.monitor.app.domain.enums.ProjectType;
 import com.service.monitor.app.repository.ProjectRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -20,6 +23,8 @@ public class ProjectService {
 
     @Autowired
     private ProjectRepository projectRepository;
+
+    private Logger logger = LoggerFactory.getLogger(ProjectService.class);
 
     public List<ProjectMiniatureDto> getAllNormalDto(){
         return mappingProjectsToMiniatureDtoList(
@@ -69,16 +74,40 @@ public class ProjectService {
     }
 
     public boolean saveProject(ProjectDto projectDto){
-        Project newProject = new Project(
+        projectRepository.save(mapToProjectFromDto(projectDto));
+        return true;
+    }
+
+    public boolean saveAllProjects(List<ProjectDto> projectDtos){
+        List<Project> projectsToSave = new ArrayList<>();
+        for(ProjectDto projectDto : projectDtos){
+            projectsToSave.add(mapToProjectFromDto(projectDto));
+        }
+        projectRepository.saveAll(projectsToSave);
+        return true;
+    }
+
+    private Project mapToProjectFromDto(ProjectDto projectDto){
+        logger.info("Receiving project transfer: " + projectDto.toString());
+        return new Project(
+                projectDto.getId(),
                 projectDto.getType(),
                 projectDto.getTitle(),
                 projectDto.getTechnologies(),
                 projectDto.getMiniatureUrl(),
                 projectDto.getDescription(),
-                projectDto.getDescriptionPage(),
+                decode64(projectDto.getDescriptionPageBase64()),
                 projectDto.getDisplayOrder());
-        projectRepository.save(newProject);
-        return true;
+    }
+
+    private String decode64(String encoded){
+        if(encoded==null){
+            return "";
+        }
+        if(encoded.isEmpty()) {
+            return "";
+        }
+        return new String(Base64.getDecoder().decode(encoded.getBytes()));
     }
 
     public boolean updateProject(ProjectDto projectDto){
@@ -91,7 +120,7 @@ public class ProjectService {
                     projectDto.getTechnologies(),
                     projectDto.getMiniatureUrl(),
                     projectDto.getDescription(),
-                    projectDto.getDescriptionPage(),
+                    projectDto.getDescriptionPageBase64(),
                     projectDto.getDisplayOrder());
             projectRepository.save(newProject);
             return true;
