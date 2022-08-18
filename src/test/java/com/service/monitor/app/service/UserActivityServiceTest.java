@@ -2,8 +2,6 @@ package com.service.monitor.app.service;
 
 import com.service.monitor.app.domain.Action;
 import com.service.monitor.app.domain.AppUser;
-import com.service.monitor.app.repository.Cache;
-import com.service.monitor.app.repository.CachedRepository;
 import com.service.monitor.app.repository.UserRepository;
 import org.junit.Assert;
 import org.junit.Test;

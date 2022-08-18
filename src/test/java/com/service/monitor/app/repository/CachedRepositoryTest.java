@@ -84,6 +84,7 @@ public class CachedRepositoryTest {
     }
 
     private List<AppUser> findUserInCache(String token){
-        return cache.users.stream().filter(appUser -> appUser.getToken().equals(token)).collect(Collectors.toList());
+        return cache.users.entrySet().stream().filter(appUser -> appUser.getValue().getToken().equals(token))
+                .map(appUser -> appUser.getValue()).collect(Collectors.toList());
     }
 }

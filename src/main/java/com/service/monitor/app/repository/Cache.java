@@ -6,13 +6,12 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 
 @Component
 public class Cache {
 
-    public List<AppUser> users = new ArrayList<>();
+    public HashMap<String,AppUser> users = new HashMap<>();
 
     private LocalDateTime now;
     private int minimumTimeOfInactivityInMinutes = 5;
@@ -37,18 +36,16 @@ public class Cache {
     }
 
     public void saveActiveUsersToDatabase(){
-        userRepository.saveAll(users);
+        userRepository.saveAll(users.values());
     }
 
     private void removeInactiveUsersFromCache(){
-        List<AppUser> inactiveUsers = new ArrayList<>();
         now = LocalDateTime.now();
-        for(AppUser user : users){
+        for(AppUser user : users.values()){
             if(isUserInactive(user)){
-                inactiveUsers.add(user);
+                users.remove(user.getToken());
             }
         }
-        users.removeAll(inactiveUsers);
     }
 
     private boolean isUserInactive(AppUser user){

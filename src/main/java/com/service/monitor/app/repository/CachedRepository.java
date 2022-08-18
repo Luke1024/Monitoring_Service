@@ -14,31 +14,35 @@ public class CachedRepository {
     private Logger logger = LoggerFactory.getLogger(CachedRepository.class);
 
     @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private CacheUserFinder cacheUserFinder;
-
-    @Autowired
     private Cache cache;
 
+    @Autowired
+    private UserRepository userRepository;
+
     public void saveUser(AppUser appUser) {
-        //avoiding duplicate users without token
-        if(isUserHasUniqueToken(appUser)) {
-            cache.users.add(appUser);
-            logger.info("Creating user in cache.");
-        } else {
-            logger.warn("Token collision detected with token: " + appUser.getToken());
-        }
+        cache.users.put(appUser.getToken(),appUser);
+        logger.info("Creating user in cache.");
     }
 
     public Optional<AppUser> findUserByToken(String token){
-        return cacheUserFinder.findUserByToken(token);
+        Optional<AppUser> appUserFromCache = searchCacheByToken(token);
+        if(appUserFromCache.isPresent()){
+            return appUserFromCache;
+        } else return userFromDatabase(token);
     }
 
-    private boolean isUserHasUniqueToken(AppUser appUser){
-        String newUserToken = appUser.getToken();
-        Optional<AppUser> appUserOptional = cacheUserFinder.findUserByToken(newUserToken);
-        return ! appUserOptional.isPresent();
+    private Optional<AppUser> searchCacheByToken(String token){
+        if(cache.users.containsKey(token)){
+            return Optional.of(cache.users.get(token));
+        } else return Optional.empty();
+    }
+
+    private Optional<AppUser> userFromDatabase(String token){
+        Optional<AppUser> appUserFromDatabase = userRepository.findByToken(token);
+        if(appUserFromDatabase.isPresent()){
+            AppUser appUser = appUserFromDatabase.get();
+            cache.users.put(appUser.getToken(), appUser);
+        }
+        return appUserFromDatabase;
     }
 }
