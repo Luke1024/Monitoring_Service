@@ -1,5 +1,6 @@
 package com.service.monitor.app.controller;
 
+import com.service.monitor.app.domain.dto.DescriptionDto;
 import com.service.monitor.app.domain.dto.ProjectMiniatureDto;
 import com.service.monitor.app.domain.dto.StringDto;
 import com.service.monitor.app.service.ProjectService;
@@ -39,7 +40,7 @@ public class ProjectController {
 
     @Cacheable("descriptions")
     @GetMapping(value = "/description/{id}")
-    public ResponseEntity<StringDto> getProjectDescription(@PathVariable long id, HttpServletRequest request){
+    public ResponseEntity<DescriptionDto> getProjectDescription(@PathVariable long id, HttpServletRequest request){
         Cookie[] cookies = request.getCookies();
         userActivityService.saveAction("requesting_project_description_" + id, cookies);
         return projectService.getDescription(id);

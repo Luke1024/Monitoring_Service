@@ -1,5 +1,6 @@
 package com.service.monitor.app.domain.dto.crud;
 
+import com.service.monitor.app.domain.dto.DescriptionDto;
 import com.service.monitor.app.domain.enums.ProjectType;
 
 public class ProjectDto {
@@ -10,31 +11,32 @@ public class ProjectDto {
     private String technologies;
     private String miniatureUrl;
     private String description;
-    private String descriptionPageBase64;
+    private DescriptionDto descriptionDto;
     private int displayOrder;
 
     public ProjectDto() {
     }
 
-    public ProjectDto(ProjectType type, String title, String technologies, String miniatureUrl, String description, String descriptionPageBase64, int displayOrder) {
+    public ProjectDto(ProjectType type, String title, String technologies, String miniatureUrl,
+                      String description, DescriptionDto descriptionDto, int displayOrder) {
         this.type = type;
         this.title = title;
         this.technologies = technologies;
         this.miniatureUrl = miniatureUrl;
         this.description = description;
-        this.descriptionPageBase64 = descriptionPageBase64;
+        this.descriptionDto = descriptionDto;
         this.displayOrder = displayOrder;
     }
 
-    public ProjectDto(long id, ProjectType type, String title, String technologies,
-                      String miniatureUrl, String description, String descriptionPageBase64, int displayOrder) {
+    public ProjectDto(long id, ProjectType type, String title, String technologies, String miniatureUrl,
+                      String description, DescriptionDto descriptionDto, int displayOrder) {
         this.id = id;
         this.type = type;
         this.title = title;
         this.technologies = technologies;
         this.miniatureUrl = miniatureUrl;
         this.description = description;
-        this.descriptionPageBase64 = descriptionPageBase64;
+        this.descriptionDto = descriptionDto;
         this.displayOrder = displayOrder;
     }
 
@@ -62,25 +64,11 @@ public class ProjectDto {
         return description;
     }
 
-    public String getDescriptionPageBase64() {
-        return descriptionPageBase64;
+    public DescriptionDto getDescriptionDto() {
+        return descriptionDto;
     }
 
     public int getDisplayOrder() {
         return displayOrder;
-    }
-
-    @Override
-    public String toString() {
-        return "ProjectDto{" +
-                "id=" + id +
-                ", type=" + type +
-                ", title='" + title + '\'' +
-                ", technologies='" + technologies + '\'' +
-                ", miniatureUrl='" + miniatureUrl + '\'' +
-                ", description='" + description + '\'' +
-                ", encodedStringLength: " + descriptionPageBase64.length() + '\'' +
-                ", displayOrder=" + displayOrder +
-                '}';
     }
 }
