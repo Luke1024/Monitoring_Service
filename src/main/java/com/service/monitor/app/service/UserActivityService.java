@@ -3,6 +3,7 @@ package com.service.monitor.app.service;
 import com.service.monitor.app.domain.Contact;
 import com.service.monitor.app.domain.dto.ContactDto;
 import com.service.monitor.app.domain.AppUser;
+import com.service.monitor.app.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,9 @@ public class UserActivityService {
     private SessionManager sessionManager;
 
     @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
     private CookieFilter cookieFilter = new CookieFilter();
 
     private Logger LOGGER = LoggerFactory.getLogger(UserActivityService.class);
@@ -46,6 +50,7 @@ public class UserActivityService {
 
     private void addActionToLastSession(AppUser appUser,String action){
         appUser.getLastSession().get().addAction(action);
+        userRepository.save(appUser);
     }
 
     public boolean saveContact(ContactDto contactDto, Cookie[] cookies) {

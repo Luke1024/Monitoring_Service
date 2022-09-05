@@ -2,8 +2,8 @@ package com.service.monitor.app.service;
 
 import com.service.monitor.app.domain.AppUser;
 import com.service.monitor.app.domain.Contact;
-import com.service.monitor.app.repository.CachedRepository;
 
+import com.service.monitor.app.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +19,10 @@ import static org.hibernate.tool.schema.SchemaToolingLogging.LOGGER;
 class UserService {
 
     @Autowired
-    private CachedRepository cachedRepository;
+    private CookieFilter cookieFilter;
 
     @Autowired
-    private CookieFilter cookieFilter;
+    private UserRepository userRepository;
 
     @Autowired
     private TokenService tokenService;
@@ -31,10 +31,11 @@ class UserService {
 
     public void saveContact(Contact contact){
         contact.getAppUser().addContact(contact);
+        userRepository.save(contact.getAppUser());
     }
 
     public Optional<AppUser> findUserByToken(String token){
-        return cachedRepository.findUserByToken(token);
+        return userRepository.findByToken(token);
     }
 
     public AppUser auth(Cookie[] cookies){
@@ -47,7 +48,7 @@ class UserService {
     }
 
     private AppUser findOrCreateUser(String token){
-        Optional<AppUser> appUserOptional = cachedRepository.findUserByToken(token);
+        Optional<AppUser> appUserOptional = userRepository.findByToken(token);
         if(appUserOptional.isPresent()){
             return appUserOptional.get();
         } else {
@@ -62,7 +63,7 @@ class UserService {
             }
         }
         AppUser user = new AppUser(token, LocalDateTime.now());
-        cachedRepository.saveUser(user);
+        userRepository.save(user);
         LOGGER.info("Authorized new user with token: " + user.getToken());
         return user;
     }

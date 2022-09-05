@@ -2,7 +2,6 @@ package com.service.monitor.app.service;
 
 import com.service.monitor.app.domain.AppUser;
 import com.service.monitor.app.domain.Contact;
-import com.service.monitor.app.repository.CachedRepository;
 import com.service.monitor.app.repository.UserRepository;
 import org.junit.Assert;
 import org.junit.Test;
@@ -14,7 +13,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import javax.servlet.http.Cookie;
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Optional;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -32,9 +31,6 @@ public class UserServiceTest {
     private UserRepository userRepository;
 
     @Autowired
-    private CachedRepository cachedRepository;
-
-    @Autowired
     private TokenService tokenService;
 
     @Autowired
@@ -42,13 +38,13 @@ public class UserServiceTest {
 
     @Test
     public void findUserByToken() {
-        AppUser appUser = createAndCacheNewUser(true);
+        AppUser appUser = createNewUser(true);
         Assert.assertEquals(appUser.getToken(), userService.findUserByToken(appUser.getToken()).get().getToken());
     }
 
     @Test
     public void saveContact() {
-        AppUser appUser = createAndCacheNewUser(true);
+        AppUser appUser = createNewUser(true);
 
         Contact contact = new Contact("name","email","message", appUser);
         userService.saveContact(contact);
@@ -63,7 +59,7 @@ public class UserServiceTest {
     //user already exist
     @Test
     public void testAuthUserWithCookiesAlreadyExist(){
-        AppUser appUser = createAndCacheNewUser(true);
+        AppUser appUser = createNewUser(true);
         Cookie[] cookies = {new Cookie(cookieFilter.authCookieName, appUser.getToken())};
         AppUser appUserAuthorized = userService.auth(cookies);
         Assert.assertEquals(appUser.getToken(), appUser.getToken());
@@ -81,10 +77,10 @@ public class UserServiceTest {
     //user already exist
     @Test
     public void testAuthUserWithoutCookiesAlreadyExist(){
-        AppUser appUser = createAndCacheNewUser(false);
+        AppUser appUser = createNewUser(false);
         Cookie[] cookies = {};
         AppUser appUserAuthorized = userService.auth(cookies);
-        Assert.assertEquals(appUser, appUser);
+        Assert.assertEquals(appUser.toString(), appUserAuthorized.toString());
     }
     //user don't exist
     @Test
@@ -102,11 +98,11 @@ public class UserServiceTest {
         AppUser appUserAuthorized3 = userService.auth(cookies);
         AppUser appUserAuthorized4 = userService.auth(cookies);
 
-        Assert.assertEquals(appUserAuthorized2, appUserAuthorized3);
-        Assert.assertEquals(appUserAuthorized3, appUserAuthorized4);
+        Assert.assertEquals(appUserAuthorized2.toString(), appUserAuthorized3.toString());
+        Assert.assertEquals(appUserAuthorized3.toString(), appUserAuthorized4.toString());
     }
 
-    private AppUser createAndCacheNewUser(boolean cookies){
+    private AppUser createNewUser(boolean cookies){
         AppUser appUser;
         if(cookies) {
             String token = tokenService.generate();
@@ -114,7 +110,15 @@ public class UserServiceTest {
         } else {
             appUser = new AppUser(tokenService.tokenReplacementWhenCookiesSwitchOff, LocalDateTime.now());
         }
-        cachedRepository.saveUser(appUser);
+        return createUserIfNotExistAlready(appUser);
+    }
+
+    private AppUser createUserIfNotExistAlready(AppUser appUser){
+        Optional<AppUser> appUserOptional = userRepository.findByToken(appUser.getToken());
+        if(appUserOptional.isPresent()) {
+            return appUserOptional.get();
+        }
+        userRepository.save(appUser);
         return appUser;
     }
 }

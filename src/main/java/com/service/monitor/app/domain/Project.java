@@ -14,7 +14,8 @@ public class Project {
     private String technologies;
     private String miniatureUrl;
     private String description;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "project_description_id")
     private ProjectDescription descriptionPage;
     private int displayOrder;
 

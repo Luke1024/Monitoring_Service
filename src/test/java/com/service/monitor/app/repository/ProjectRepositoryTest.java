@@ -1,6 +1,7 @@
 package com.service.monitor.app.repository;
 
 import com.service.monitor.app.domain.Project;
+import com.service.monitor.app.domain.ProjectDescription;
 import com.service.monitor.app.domain.enums.ProjectType;
 import org.junit.Assert;
 import org.junit.Before;
@@ -19,6 +20,9 @@ public class ProjectRepositoryTest {
     @Autowired
     private ProjectRepository projectRepository;
 
+    @Autowired
+    private ProjectDescriptionRepository projectDescriptionRepository;
+
     @Before
     public void cleanDatabase(){
         projectRepository.deleteAll();
@@ -26,14 +30,14 @@ public class ProjectRepositoryTest {
 
     @Test
     public void getProjectByType(){
-        Project projectTypeNormal = new Project(1, ProjectType.NORMAL,"","","","","", 0);
-        Project projectTypeMini = new Project(2,ProjectType.MINI, "", "", "", "", "", 1);
+
+        Project projectTypeNormal = new Project(1, ProjectType.NORMAL,"","","","", new ProjectDescription(), 0);
+        Project projectTypeMini = new Project(2,ProjectType.MINI, "", "", "", "", new ProjectDescription(), 1);
 
         projectRepository.save(projectTypeNormal);
         projectRepository.save(projectTypeMini);
 
         long normalId = projectTypeNormal.getId();
-
 
         List<Project> projects = projectRepository.findByType(ProjectType.NORMAL);
 
