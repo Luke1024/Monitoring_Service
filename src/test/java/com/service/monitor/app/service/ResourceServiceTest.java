@@ -76,7 +76,6 @@ public class ResourceServiceTest {
     @Test
     public void testGetImage(){
 
-
         byte[] imageReceivedDecode = resourceService.getImage(imageKey1, imageResource1.getId());
 
         Assert.assertNotNull(imageReceivedDecode);

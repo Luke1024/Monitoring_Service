@@ -28,8 +28,10 @@ public class ContactDto {
 
     @Override
     public String toString() {
-        return "name='" + name + '\'' +
+        return "ContactDto{" +
+                "name='" + name + '\'' +
                 ", email='" + email + '\'' +
-                ", message='" + message;
+                ", message='" + message + '\'' +
+                '}';
     }
 }

@@ -17,13 +17,13 @@ class PreAuthService {
     private SecureRandom random = new SecureRandom();
 
     @Autowired
-    private UserService userService;
-
-    @Autowired
     private TokenService tokenService;
 
     @Autowired
     private CookieFilter cookieFilter;
+
+    @Autowired
+    private UserService userActivityService;
 
     private Logger LOGGER = LoggerFactory.getLogger(PreAuthService.class);
 
@@ -47,7 +47,7 @@ class PreAuthService {
     }
 
     private Optional<AppUser> findUserByToken(String token){
-        return userService.findUserByToken(token);
+        return userActivityService.findUserByToken(token);
     }
 
     private void generateNewToken(HttpServletResponse response){
