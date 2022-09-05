@@ -1,25 +1,31 @@
 package com.service.monitor.app.service;
 
-import com.service.monitor.app.domain.AppUser;
 import com.service.monitor.app.domain.Contact;
-import com.service.monitor.app.repository.CachedRepository;
-
+import com.service.monitor.app.domain.dto.ContactDto;
+import com.service.monitor.app.domain.AppUser;
+import com.service.monitor.app.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-import static org.hibernate.tool.schema.SchemaToolingLogging.LOGGER;
 
 @Service
-class UserService {
+public class UserService {
 
     @Autowired
-    private CachedRepository cachedRepository;
+    private PreAuthService identityAuthorizer;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private SessionManager sessionManager;
 
     @Autowired
     private CookieFilter cookieFilter;
@@ -27,32 +33,41 @@ class UserService {
     @Autowired
     private TokenService tokenService;
 
-    private Logger logger = LoggerFactory.getLogger(UserService.class);
+    private Logger LOGGER = LoggerFactory.getLogger(UserService.class);
 
-    public void saveContact(Contact contact){
-        contact.getAppUser().addContact(contact);
+    public void preAuth(Cookie[] cookies, HttpServletResponse response) {
+        identityAuthorizer.preAuth(cookies, response);
     }
 
-    public Optional<AppUser> findUserByToken(String token){
-        return cachedRepository.findUserByToken(token);
+    public synchronized boolean saveAction(String action, Cookie[] cookies) {
+        AppUser appUser = getOrCreateUserBasedOnToken(cookies);
+        Optional<String> sessionToken = cookieFilter.filterCookiesToValue(cookies, cookieFilter.sessionCookieName);
+        sessionManager.addSessionIfNecessary(appUser, sessionToken);
+        addActionToLastSession(appUser,action);
+        return true;
     }
 
-    public AppUser auth(Cookie[] cookies){
-        Optional<String> token = cookieFilter.filterCookiesToValue(cookies, cookieFilter.authCookieName);
-        if(token.isPresent()){
-            return findOrCreateUser(token.get());
-        } else {
-            return findOrCreateUser(tokenService.tokenReplacementWhenCookiesSwitchOff);
-        }
+    public synchronized Optional<AppUser> findUserByToken(String token){
+        return userRepository.findByToken(token);
     }
 
-    private AppUser findOrCreateUser(String token){
-        Optional<AppUser> appUserOptional = cachedRepository.findUserByToken(token);
-        if(appUserOptional.isPresent()){
-            return appUserOptional.get();
-        } else {
-            return createUser(token);
-        }
+    public synchronized boolean saveContact(ContactDto contactDto, Cookie[] cookies) {
+        AppUser appUser = getOrCreateUserBasedOnToken(cookies);
+        Contact contact = new Contact(contactDto.getName(),
+                        contactDto.getEmail(),
+                        contactDto.getMessage(),
+                        appUser);
+
+        appUser.addContact(contact);
+        userRepository.save(appUser);
+        LOGGER.info("Contact added: " + contactDto.toString() + ", by user with id:" +
+                appUser.getId() + ", token: " + appUser.getToken());
+        return true;
+    }
+
+    private void addActionToLastSession(AppUser appUser,String action){
+        appUser.getLastSession().get().addAction(action);
+        userRepository.save(appUser);
     }
 
     private AppUser createUser(String token){
@@ -62,8 +77,26 @@ class UserService {
             }
         }
         AppUser user = new AppUser(token, LocalDateTime.now());
-        cachedRepository.saveUser(user);
+        userRepository.save(user);
         LOGGER.info("Authorized new user with token: " + user.getToken());
         return user;
+    }
+
+    protected AppUser getOrCreateUserBasedOnToken(Cookie[] cookies){
+        Optional<String> token = cookieFilter.filterCookiesToValue(cookies, cookieFilter.authCookieName);
+        if(token.isPresent()){
+            return findOrCreateUser(token.get());
+        } else {
+            return findOrCreateUser(tokenService.tokenReplacementWhenCookiesSwitchOff);
+        }
+    }
+
+    private AppUser findOrCreateUser(String token){
+        Optional<AppUser> appUserOptional = userRepository.findByToken(token);
+        if(appUserOptional.isPresent()){
+            return appUserOptional.get();
+        } else {
+            return createUser(token);
+        }
     }
 }

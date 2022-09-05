@@ -63,4 +63,12 @@ public class AppUser {
     public LocalDateTime getLastActive() {
         return lastActive;
     }
+
+    @Override
+    public String toString() {
+        return "AppUser{" +
+                "id=" + id +
+                ", token='" + token + '\'' +
+                '}';
+    }
 }

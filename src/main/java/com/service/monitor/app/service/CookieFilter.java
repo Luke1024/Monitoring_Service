@@ -21,9 +21,6 @@ class CookieFilter {
 
     private Logger LOGGER = LoggerFactory.getLogger(CookieFilter.class);
 
-    @Autowired
-    private UserService userService;
-
     public Optional<String> filterCookiesToValue(Cookie[] cookies, String cookieName){
         List<String> tokenList = new ArrayList<>();
         if(cookies == null) {

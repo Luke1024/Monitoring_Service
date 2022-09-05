@@ -1,9 +1,9 @@
 package com.service.monitor.app.controller;
 
+import com.service.monitor.app.domain.dto.DescriptionDto;
 import com.service.monitor.app.domain.dto.ProjectMiniatureDto;
-import com.service.monitor.app.domain.dto.StringDto;
 import com.service.monitor.app.service.ProjectService;
-import com.service.monitor.app.service.UserActivityService;
+import com.service.monitor.app.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +23,7 @@ public class ProjectController {
     private ProjectService projectService;
 
     @Autowired
-    private UserActivityService userActivityService;
+    private UserService userActivityService;
 
     @GetMapping(value = "/normal")
     @Cacheable("normalProjects")
@@ -39,7 +39,7 @@ public class ProjectController {
 
     @Cacheable("descriptions")
     @GetMapping(value = "/description/{id}")
-    public ResponseEntity<StringDto> getProjectDescription(@PathVariable long id, HttpServletRequest request){
+    public ResponseEntity<DescriptionDto> getProjectDescription(@PathVariable long id, HttpServletRequest request){
         Cookie[] cookies = request.getCookies();
         userActivityService.saveAction("requesting_project_description_" + id, cookies);
         return projectService.getDescription(id);

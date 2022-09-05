@@ -14,14 +14,16 @@ public class Project {
     private String technologies;
     private String miniatureUrl;
     private String description;
-    @Column(columnDefinition = "LONGTEXT")
-    private String descriptionPage;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "project_description_id")
+    private ProjectDescription descriptionPage;
     private int displayOrder;
 
     public Project() {
     }
 
-    public Project(long id, ProjectType type, String title, String technologies, String miniatureUrl, String description, String descriptionPage, int displayOrder) {
+    public Project(long id, ProjectType type, String title, String technologies, String miniatureUrl,
+                   String description, ProjectDescription descriptionPage, int displayOrder) {
         this.id = id;
         this.type = type;
         this.title = title;
@@ -56,7 +58,7 @@ public class Project {
         return description;
     }
 
-    public String getDescriptionPage() {
+    public ProjectDescription getDescriptionPage() {
         return descriptionPage;
     }
 
