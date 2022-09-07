@@ -1,13 +1,7 @@
 package com.service.monitor.app.mapper;
 
-import com.service.monitor.app.domain.Button;
-import com.service.monitor.app.domain.DescriptionImage;
-import com.service.monitor.app.domain.Project;
-import com.service.monitor.app.domain.ProjectDescription;
-import com.service.monitor.app.domain.dto.ButtonDto;
-import com.service.monitor.app.domain.dto.DescriptionDto;
-import com.service.monitor.app.domain.dto.DescriptionImageDto;
-import com.service.monitor.app.domain.dto.ProjectMiniatureDto;
+import com.service.monitor.app.domain.*;
+import com.service.monitor.app.domain.dto.*;
 import com.service.monitor.app.domain.dto.crud.ProjectDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,19 +18,23 @@ public class ProjectMapper {
     public DescriptionDto mapToDescriptionDto(ProjectDescription projectDescription){
         return new DescriptionDto(
                 projectDescription.getTitle(),
-                projectDescription.getDescription(),
-                mapToDescriptionImageDtoList(projectDescription.getDescriptionImageList()),
+                mapToDescriptionPartsDtoList(projectDescription.getDescriptionParts()),
                 mapToButtonList(projectDescription.getButtonList()));
     }
 
-    private List<DescriptionImageDto> mapToDescriptionImageDtoList(List<DescriptionImage> descriptionImages){
-        return descriptionImages.stream()
-                .map(descriptionImage -> mapToDescriptionImageDto(descriptionImage)).collect(Collectors.toList());
+    private List<DescriptionPartDto> mapToDescriptionPartsDtoList(List<DescriptionPart> descriptionParts){
+        return descriptionParts.stream()
+                .map(descriptionPart -> mapToDescriptionPartDto(descriptionPart)).collect(Collectors.toList());
+    }
+
+    private DescriptionPartDto mapToDescriptionPartDto(DescriptionPart descriptionPart){
+        return new DescriptionPartDto(descriptionPart.getDescription(), descriptionPart.isContainImage(),
+                descriptionPart.isImageTop(), mapToDescriptionImageDto(descriptionPart.getDescriptionImage()));
     }
 
     private DescriptionImageDto mapToDescriptionImageDto(DescriptionImage descriptionImage){
         return new DescriptionImageDto(descriptionImage.getWidth(), descriptionImage.getHeight(),
-                descriptionImage.getImageUrl(), descriptionImage.getDescription());
+                descriptionImage.getImageUrl(),descriptionImage.getDescription());
     }
 
     private List<ButtonDto> mapToButtonList(List<Button> buttons){
@@ -75,9 +73,17 @@ public class ProjectMapper {
     public ProjectDescription mapToProjectDescription(DescriptionDto descriptionDto){
         return new ProjectDescription(
                 descriptionDto.getTitle(),
-                descriptionDto.getDescription(),
-                mapToDescriptionImages(descriptionDto.getDescriptionImageDtos()),
+                maptoDescriptionParts(descriptionDto.getDescriptionPartDtos()),
                 mapToButtons(descriptionDto.getButtonDtos()));
+    }
+
+    private List<DescriptionPart> maptoDescriptionParts(List<DescriptionPartDto> descriptionPartDtos){
+        return descriptionPartDtos.stream().map(descriptionPartDto -> mapToDescriptionPart(descriptionPartDto)).collect(Collectors.toList());
+    }
+
+    private DescriptionPart mapToDescriptionPart(DescriptionPartDto descriptionPartDto){
+        return new DescriptionPart(descriptionPartDto.getDescription(), descriptionPartDto.isContainImage(),
+                descriptionPartDto.isImageTop(), mapToDescriptionImage(descriptionPartDto.getImage()),null);
     }
 
     private List<DescriptionImage> mapToDescriptionImages(List<DescriptionImageDto> descriptionImageDtos){
@@ -85,7 +91,8 @@ public class ProjectMapper {
     }
 
     private DescriptionImage mapToDescriptionImage(DescriptionImageDto descriptionImageDto){
-        return new DescriptionImage();
+        return new DescriptionImage(descriptionImageDto.getWidth(), descriptionImageDto.getHeight(), descriptionImageDto.getImageUrl(),
+                descriptionImageDto.getDescription());
     }
 
     private List<Button> mapToButtons(List<ButtonDto> buttonDtos){

@@ -4,14 +4,13 @@ import java.util.List;
 
 public class DescriptionDto {
     private String title;
-    private String description;
-    private List<DescriptionImageDto> descriptionImageDtos;
+    private List<DescriptionPartDto> descriptionPartDtos;
     private List<ButtonDto> buttonDtos;
 
-    public DescriptionDto(String title, String description, List<DescriptionImageDto> descriptionImageDtos, List<ButtonDto> buttonDtos) {
+    public DescriptionDto(String title, List<DescriptionPartDto> descriptionPartDtos,
+                          List<ButtonDto> buttonDtos) {
         this.title = title;
-        this.description = description;
-        this.descriptionImageDtos = descriptionImageDtos;
+        this.descriptionPartDtos = descriptionPartDtos;
         this.buttonDtos = buttonDtos;
     }
 
@@ -19,12 +18,8 @@ public class DescriptionDto {
         return title;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public List<DescriptionImageDto> getDescriptionImageDtos() {
-        return descriptionImageDtos;
+    public List<DescriptionPartDto> getDescriptionPartDtos() {
+        return descriptionPartDtos;
     }
 
     public List<ButtonDto> getButtonDtos() {

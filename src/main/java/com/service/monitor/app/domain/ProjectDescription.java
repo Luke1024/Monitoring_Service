@@ -9,10 +9,9 @@ public class ProjectDescription {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     private String title;
-    private String description;
-    @OneToMany(targetEntity = DescriptionImage.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(targetEntity = DescriptionPart.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @OrderColumn
-    private List<DescriptionImage> descriptionImageList;
+    private List<DescriptionPart> descriptionParts;
     @OneToMany(targetEntity = Button.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @OrderColumn
     private List<Button> buttonList;
@@ -20,17 +19,15 @@ public class ProjectDescription {
     public ProjectDescription() {
     }
 
-    public ProjectDescription(String title, String description,
-                              List<DescriptionImage> descriptionImageList, List<Button> buttonList) {
+    public ProjectDescription(String title, List<DescriptionPart> descriptionParts, List<Button> buttonList) {
         this.title = title;
-        this.description = description;
-        initializeDescriptionImageList(descriptionImageList);
+        initializeDescriptionPartList(descriptionParts);
         initializeButtonList(buttonList);
     }
 
-    private void initializeDescriptionImageList(List<DescriptionImage> descriptionImages){
-        descriptionImages.stream().forEach(descriptionImage -> descriptionImage.setProjectDescription(this));
-        this.descriptionImageList = descriptionImages;
+    private void initializeDescriptionPartList(List<DescriptionPart> descriptionParts){
+        descriptionParts.stream().forEach(descriptionPart -> descriptionPart.setProjectDescription(this));
+        this.descriptionParts = descriptionParts;
     }
 
     private void initializeButtonList(List<Button> buttons){
@@ -46,12 +43,8 @@ public class ProjectDescription {
         return title;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public List<DescriptionImage> getDescriptionImageList() {
-        return descriptionImageList;
+    public List<DescriptionPart> getDescriptionParts() {
+        return descriptionParts;
     }
 
     public List<Button> getButtonList() {

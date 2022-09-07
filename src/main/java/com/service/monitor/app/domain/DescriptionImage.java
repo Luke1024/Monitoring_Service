@@ -11,9 +11,9 @@ public class DescriptionImage {
     private int height;
     private String imageUrl;
     private String description;
-    @ManyToOne
-    @JoinColumn(name="PROJECT_DESCRIPTION_ID")
-    private ProjectDescription projectDescription;
+    @OneToOne
+    @JoinColumn(name="DESCRIPTION_PART_ID")
+    private DescriptionPart descriptionPart;
 
     public DescriptionImage() {
     }
@@ -25,16 +25,12 @@ public class DescriptionImage {
         this.description = description;
     }
 
-    public DescriptionImage(int width, int height, String imageUrl, String description, ProjectDescription projectDescription) {
+    public DescriptionImage(int width, int height, String imageUrl, String description, DescriptionPart descriptionPart) {
         this.width = width;
         this.height = height;
         this.imageUrl = imageUrl;
         this.description = description;
-        this.projectDescription = projectDescription;
-    }
-
-    public void setProjectDescription(ProjectDescription projectDescription) {
-        this.projectDescription = projectDescription;
+        this.descriptionPart = descriptionPart;
     }
 
     public long getId() {
@@ -57,7 +53,7 @@ public class DescriptionImage {
         return description;
     }
 
-    public ProjectDescription getProjectDescription() {
-        return projectDescription;
+    public DescriptionPart getDescriptionPart() {
+        return descriptionPart;
     }
 }
