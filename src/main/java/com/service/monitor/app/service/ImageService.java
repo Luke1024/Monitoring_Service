@@ -60,14 +60,11 @@ public class ImageService {
     }
 
     public boolean saveAllImages(List<ImageDto> imageDtoList){
+        logger.info("Saving images: " + imageDtoList.stream()
+                .map(imageDto -> imageDto.getName()).collect(Collectors.joining(", ")));
         List<Image> imagesToSave =
                 imageDtoList.stream().map(dto -> mapToImage(dto)).collect(Collectors.toList());
         imageRepository.saveAll(imagesToSave);
-        return true;
-    }
-
-    public boolean saveImage(ImageDto imageDto){
-        imageRepository.save(mapToImage(imageDto));
         return true;
     }
 

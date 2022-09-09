@@ -42,13 +42,6 @@ public class ImageCrudController {
         } else return false;
     }
 
-    @PostMapping(value = "image/{adminKey}")
-    public boolean saveImage(@RequestBody ImageDto imageDto, @PathVariable String adminKey){
-        if(authorize(adminKey)){
-            return imageService.saveImage(imageDto);
-        } else return false;
-    }
-
     @PutMapping(value = "image/{adminKey}")
     public boolean updateImage(@RequestBody ImageDto imageDto, @PathVariable String adminKey){
         if(authorize(adminKey)){

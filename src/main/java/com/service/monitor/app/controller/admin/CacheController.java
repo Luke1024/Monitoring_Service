@@ -28,10 +28,6 @@ public class CacheController {
         }
     }
 
-    void clearCacheWithoutAuth(){
-        clear();
-    }
-
     private void clear(){
         logger.info("Clearing all caches.");
         cacheManager.getCacheNames().stream()
