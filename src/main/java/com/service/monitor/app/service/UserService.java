@@ -4,6 +4,8 @@ import com.service.monitor.app.domain.Contact;
 import com.service.monitor.app.domain.dto.ContactDto;
 import com.service.monitor.app.domain.AppUser;
 import com.service.monitor.app.repository.UserRepository;
+import com.service.monitor.app.service.monitoring.ActivityService;
+import com.service.monitor.app.service.monitoring.StatusService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +35,12 @@ public class UserService {
     @Autowired
     private TokenService tokenService;
 
+    @Autowired
+    private StatusService statusService;
+
+    @Autowired
+    private ActivityService activityService;
+
     private Logger LOGGER = LoggerFactory.getLogger(UserService.class);
 
     public void preAuth(Cookie[] cookies, HttpServletResponse response) {
@@ -60,26 +68,18 @@ public class UserService {
 
         appUser.addContact(contact);
         userRepository.save(appUser);
+        statusService.getStatusDto().addNewContact();
         LOGGER.info("Contact added: " + contactDto.toString() + ", by user with id:" +
                 appUser.getId() + ", token: " + appUser.getToken());
+
         return true;
     }
 
     private void addActionToLastSession(AppUser appUser,String action){
         appUser.getLastSession().get().addAction(action);
         userRepository.save(appUser);
-    }
-
-    private AppUser createUser(String token){
-        if( ! tokenService.checkIfTokenWasGeneratedInAuthAndRemove(token)){
-            if( ! token.equals(tokenService.tokenReplacementWhenCookiesSwitchOff)) {
-                LOGGER.warn("Someone generated valid token from outside.");
-            }
-        }
-        AppUser user = new AppUser(token, LocalDateTime.now());
-        userRepository.save(user);
-        LOGGER.info("Authorized new user with token: " + user.getToken());
-        return user;
+        statusService.getStatusDto().addNewAction();
+        activityService.passAction(action);
     }
 
     protected AppUser getOrCreateUserBasedOnToken(Cookie[] cookies){
@@ -92,11 +92,24 @@ public class UserService {
     }
 
     private AppUser findOrCreateUser(String token){
-        Optional<AppUser> appUserOptional = userRepository.findByToken(token);
+        Optional<AppUser> appUserOptional = findUserByToken(token);
         if(appUserOptional.isPresent()){
             return appUserOptional.get();
         } else {
             return createUser(token);
         }
+    }
+
+    private AppUser createUser(String token){
+        if( ! tokenService.checkIfTokenWasGeneratedInAuthAndRemove(token)){
+            if( ! token.equals(tokenService.tokenReplacementWhenCookiesSwitchOff)) {
+                LOGGER.warn("Someone generated valid token from outside.");
+            }
+        }
+        AppUser user = new AppUser(token, LocalDateTime.now());
+        userRepository.save(user);
+        statusService.getStatusDto().addNewUser();
+        LOGGER.info("Authorized new user with token: " + user.getToken());
+        return user;
     }
 }

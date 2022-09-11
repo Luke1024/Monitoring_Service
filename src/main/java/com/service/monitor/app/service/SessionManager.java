@@ -1,6 +1,7 @@
 package com.service.monitor.app.service;
 import com.service.monitor.app.domain.AppUser;
 import com.service.monitor.app.domain.UserSession;
+import com.service.monitor.app.service.monitoring.StatusService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,9 @@ class SessionManager {
 
     @Autowired
     private TokenService tokenService;
+
+    @Autowired
+    private StatusService statusService;
 
     public void addSessionIfNecessary(AppUser appUser, Optional<String> sessionToken){
         if(sessionToken.isPresent()){
@@ -39,12 +43,14 @@ class SessionManager {
     }
 
     private void createANewSession(AppUser appUser, String sessionToken){
+        statusService.getStatusDto().addVisit();
         appUser.addSession(sessionToken);
     }
 
     private void addBasicSessionWithoutCookiesIfNecessary(AppUser appUser){
         Optional<UserSession> userSession = appUser.getLastSession();
         if( ! userSession.isPresent()){
+            statusService.getStatusDto().addVisit();
             appUser.addSession(tokenService.tokenReplacementWhenCookiesSwitchOff);
         }
     }
