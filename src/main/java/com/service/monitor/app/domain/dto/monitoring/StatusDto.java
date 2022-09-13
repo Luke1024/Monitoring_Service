@@ -1,9 +1,9 @@
-package com.service.monitor.app.domain.dto.messaging;
+package com.service.monitor.app.domain.dto.monitoring;
 
 public class StatusDto {
     private int visits;
     private int newUsers;
-    private int newContacs;
+    private int newContacts;
     private int newActions;
 
     public StatusDto() {
@@ -18,7 +18,7 @@ public class StatusDto {
     }
 
     public void addNewContact(){
-        newContacs++;
+        newContacts++;
     }
 
     public void addNewAction(){

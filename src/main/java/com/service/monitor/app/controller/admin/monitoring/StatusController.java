@@ -1,6 +1,6 @@
 package com.service.monitor.app.controller.admin.monitoring;
 
-import com.service.monitor.app.domain.dto.messaging.StatusDto;
+import com.service.monitor.app.domain.dto.monitoring.StatusDto;
 import com.service.monitor.app.service.AdminAuthService;
 import com.service.monitor.app.service.monitoring.StatusService;
 import org.springframework.beans.factory.annotation.Autowired;
