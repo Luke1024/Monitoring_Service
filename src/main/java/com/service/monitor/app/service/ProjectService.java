@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,12 +30,17 @@ public class ProjectService {
 
     public List<ProjectMiniatureDto> getAllNormalDto(){
         return projectMapper.mappingProjectsToMiniatureDtoList(
-                projectRepository.findByType(ProjectType.NORMAL));
+                sortByDisplayOrder(projectRepository.findByType(ProjectType.NORMAL)));
     }
 
-    public List<ProjectMiniatureDto> getAllMiniDto(){
+    public List<ProjectMiniatureDto> getAllMiniDto() {
         return projectMapper.mappingProjectsToMiniatureDtoList(
-                projectRepository.findByType(ProjectType.MINI));
+                sortByDisplayOrder(projectRepository.findByType(ProjectType.MINI)));
+    }
+
+    private List<Project> sortByDisplayOrder(List<Project> projects){
+        projects.sort(Comparator.comparing(Project::getDisplayOrder));
+        return projects;
     }
 
     public ResponseEntity<DescriptionDto> getDescription(long id){

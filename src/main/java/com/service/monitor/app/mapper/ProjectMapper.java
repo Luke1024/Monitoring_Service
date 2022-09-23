@@ -60,7 +60,6 @@ public class ProjectMapper {
 
     public Project mapToProjectFromDto(ProjectDto projectDto){
         return new Project(
-                projectDto.getId(),
                 projectDto.getType(),
                 projectDto.getTitle(),
                 projectDto.getTechnologies(),
@@ -83,7 +82,7 @@ public class ProjectMapper {
 
     private DescriptionPart mapToDescriptionPart(DescriptionPartDto descriptionPartDto){
         return new DescriptionPart(descriptionPartDto.getDescription(), descriptionPartDto.isContainImage(),
-                descriptionPartDto.isImageTop(), mapToDescriptionImage(descriptionPartDto.getImage()),null);
+                descriptionPartDto.isImageTop(), mapToDescriptionImage(descriptionPartDto.getImage()), null);
     }
 
     private List<DescriptionImage> mapToDescriptionImages(List<DescriptionImageDto> descriptionImageDtos){

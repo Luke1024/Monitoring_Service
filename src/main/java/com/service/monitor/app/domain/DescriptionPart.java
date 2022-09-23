@@ -7,6 +7,7 @@ public class DescriptionPart {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
+    @Column(columnDefinition = "LONGTEXT")
     private String description;
     private boolean containImage;
     private boolean imageTop;
