@@ -12,7 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import reactor.core.publisher.Flux;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +23,6 @@ public class ActivityService {
 
     private Logger logger = LoggerFactory.getLogger(ActivityService.class);
 
-    private Flux<String> flux;
 
     @Autowired
     private UserRepository userRepository;

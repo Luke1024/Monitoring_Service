@@ -14,6 +14,7 @@ public class Project {
     private String title;
     private String technologies;
     private String miniatureUrl;
+    @Column(columnDefinition = "MEDIUMTEXT")
     private String description;
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "project_description_id")

@@ -10,6 +10,7 @@ public class DescriptionImage {
     private int width;
     private int height;
     private String imageUrl;
+    @Column(columnDefinition = "MEDIUMTEXT")
     private String description;
     @OneToOne
     @JoinColumn(name="DESCRIPTION_PART_ID")

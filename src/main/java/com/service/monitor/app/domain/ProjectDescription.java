@@ -9,6 +9,8 @@ public class ProjectDescription {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     private String title;
+    @Column(columnDefinition = "MEDIUMTEXT")
+    private String intro;
     @OneToMany(targetEntity = DescriptionPart.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @OrderColumn
     private List<DescriptionPart> descriptionParts;
@@ -19,8 +21,9 @@ public class ProjectDescription {
     public ProjectDescription() {
     }
 
-    public ProjectDescription(String title, List<DescriptionPart> descriptionParts, List<Button> buttonList) {
+    public ProjectDescription(String title, String intro, List<DescriptionPart> descriptionParts, List<Button> buttonList) {
         this.title = title;
+        this.intro = intro;
         initializeDescriptionPartList(descriptionParts);
         initializeButtonList(buttonList);
     }
@@ -49,5 +52,9 @@ public class ProjectDescription {
 
     public List<Button> getButtonList() {
         return buttonList;
+    }
+
+    public String getIntro() {
+        return intro;
     }
 }

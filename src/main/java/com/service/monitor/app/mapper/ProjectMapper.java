@@ -18,6 +18,7 @@ public class ProjectMapper {
     public DescriptionDto mapToDescriptionDto(ProjectDescription projectDescription){
         return new DescriptionDto(
                 projectDescription.getTitle(),
+                projectDescription.getIntro(),
                 mapToDescriptionPartsDtoList(projectDescription.getDescriptionParts()),
                 mapToButtonList(projectDescription.getButtonList()));
     }
@@ -72,6 +73,7 @@ public class ProjectMapper {
     public ProjectDescription mapToProjectDescription(DescriptionDto descriptionDto){
         return new ProjectDescription(
                 descriptionDto.getTitle(),
+                descriptionDto.getIntro(),
                 maptoDescriptionParts(descriptionDto.getDescriptionPartDtos()),
                 mapToButtons(descriptionDto.getButtonDtos()));
     }
